@@ -4,6 +4,14 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+
+/*
+ * 
+ * we will send product details to front-end in form of this dto class object
+ * 
+ */
+
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor

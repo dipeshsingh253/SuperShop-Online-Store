@@ -1,10 +1,14 @@
 package com.supershop.dto;
 
-import com.supershop.model.Payment;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+/*
+ * 
+ * we will return order details in form of this dto class object
+ * 
+ */
 
 @Data
 @AllArgsConstructor

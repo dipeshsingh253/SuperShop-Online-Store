@@ -1,5 +1,7 @@
 package com.supershop.model;
 
+import java.time.LocalDateTime;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -36,5 +38,7 @@ public class Payment {
 	private User user;
 
 	private String status;
+
+	private LocalDateTime paymentDateTime;
 
 }

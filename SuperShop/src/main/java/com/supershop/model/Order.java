@@ -1,5 +1,7 @@
 package com.supershop.model;
 
+import java.time.LocalDateTime;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -26,6 +28,8 @@ public class Order {
 	@OneToOne
 	@JoinColumn(name = "payment_id", referencedColumnName = "id")
 	private Payment payment;
+	
+	private LocalDateTime orderDate;
 
 	private String status;
 }
