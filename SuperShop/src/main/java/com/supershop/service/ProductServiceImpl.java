@@ -125,5 +125,20 @@ public class ProductServiceImpl implements ProductService {
 		return "All Products removed successfully";
 	}
 
-	
+	@Override
+	public List<Product> listProductsByCategoryId(Integer categoryId) throws CategoryException, ProductException {
+
+		Optional<Category> optionalCategory = categoryRepository.findById(categoryId);
+
+		if (optionalCategory.isEmpty()) {
+			throw new CategoryException("no category available for given id " + categoryId);
+		}
+
+		Category category = optionalCategory.get();
+
+		List<Product> products = productRepository.findByCategory(category);
+
+		return products;
+	}
+
 }

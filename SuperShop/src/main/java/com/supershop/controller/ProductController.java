@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -23,8 +24,7 @@ public class ProductController {
 
 	@Autowired
 	private ProductService productService;
-	
-	
+
 	@PostMapping("/products")
 	public ResponseEntity<Product> addProduct(@RequestBody Product product) throws CategoryException, ProductException {
 
@@ -53,8 +53,9 @@ public class ProductController {
 
 	}
 
-	@GetMapping("/products/id")
-	public ResponseEntity<Product> getProductByid(@RequestParam Integer id) throws CategoryException, ProductException {
+	@GetMapping("/products/{id}")
+	public ResponseEntity<Product> getProductByid(@PathVariable("id") Integer id)
+			throws CategoryException, ProductException {
 
 		Product product = productService.getProductById(id);
 
@@ -62,8 +63,8 @@ public class ProductController {
 
 	}
 
-	@DeleteMapping("/products/id")
-	public ResponseEntity<Product> deleteProductById(@RequestParam Integer id)
+	@DeleteMapping("/products/{id}")
+	public ResponseEntity<Product> deleteProductById(@PathVariable("id") Integer id)
 			throws CategoryException, ProductException {
 
 		Product deletedProduct = productService.removeProduct(id);
@@ -78,6 +79,15 @@ public class ProductController {
 		String message = productService.removeAllProducts();
 
 		return new ResponseEntity<String>(message, HttpStatus.OK);
+	}
+
+	@GetMapping("/products/category/{categoryId}")
+	public ResponseEntity<List<Product>> getProductsByCategoryId(@PathVariable("categoryId") Integer categoryid) throws CategoryException, ProductException {
+
+		List<Product> products = productService.listProductsByCategoryId(categoryid);
+
+		return new ResponseEntity<List<Product>>(products, HttpStatus.OK);
+
 	}
 
 }

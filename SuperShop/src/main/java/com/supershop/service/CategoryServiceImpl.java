@@ -91,30 +91,30 @@ public class CategoryServiceImpl implements CategoryService {
 		return "Categories Removed Successfully";
 	}
 
-	@Override
-	public Set<Product> getProductsByCategory(String name) throws CategoryException, ProductException, UserException {
-
-		Category category = categoryRepository.findByName(name);
-
-		if (category == null) {
-			throw new CategoryException("category does not exist with given name : " + name);
-		}
-
-//		List<Product> products = new ArrayList<>();
+//	@Override
+//	public Set<Product> getProductsByCategory(String name) throws CategoryException, ProductException, UserException {
 //
-//		products.addAll(category.getProducts());
+//		Category category = categoryRepository.findByName(name);
+//
+//		if (category == null) {
+//			throw new CategoryException("category does not exist with given name : " + name);
+//		}
+//
+////		List<Product> products = new ArrayList<>();
+////
+////		products.addAll(category.getProducts());
+////
+////		if (products.isEmpty()) {
+////			throw new ProductException("No Products available in category " + name);
+////		}
+//
+//		Set<Product> products = category.getProducts();
 //
 //		if (products.isEmpty()) {
 //			throw new ProductException("No Products available in category " + name);
 //		}
-
-		Set<Product> products = category.getProducts();
-
-		if (products.isEmpty()) {
-			throw new ProductException("No Products available in category " + name);
-		}
-
-		return products;
-	}
+//
+//		return products;
+//	}
 
 }

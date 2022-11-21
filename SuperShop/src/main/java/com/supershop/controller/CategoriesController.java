@@ -66,16 +66,6 @@ public class CategoriesController {
 
 	}
 
-	@GetMapping("/categories/products")
-	public ResponseEntity<Set<Product>> getAllProductsBycategory(@RequestParam String categoryName)
-			throws CategoryException, ProductException, UserException {
-
-		Set<Product> products = categoryService.getProductsByCategory(categoryName);
-
-		return new ResponseEntity<Set<Product>>(products, HttpStatus.OK);
-
-	}
-
 	@DeleteMapping("/categories/id")
 	public ResponseEntity<Category> removeCategoryById(@RequestParam Integer categoryId)
 			throws CategoryException, UserException {
@@ -95,5 +85,15 @@ public class CategoriesController {
 		return new ResponseEntity<String>(message, HttpStatus.OK);
 
 	}
+
+//	@GetMapping("/categories/products")
+//	public ResponseEntity<Set<Product>> getAllProductsBycategory(@RequestParam String categoryName)
+//			throws CategoryException, ProductException, UserException {
+//
+//		Set<Product> products = categoryService.getProductsByCategory(categoryName);
+//
+//		return new ResponseEntity<Set<Product>>(products, HttpStatus.OK);
+//
+//	}
 
 }

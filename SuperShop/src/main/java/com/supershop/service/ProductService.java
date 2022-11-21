@@ -8,9 +8,9 @@ import com.supershop.model.Product;
 
 public interface ProductService {
 
-	Product addProduct(Product product) throws CategoryException,ProductException;
+	Product addProduct(Product product) throws CategoryException, ProductException;
 
-	Product updateProduct(Product product) throws CategoryException,ProductException;
+	Product updateProduct(Product product) throws CategoryException, ProductException;
 
 	List<Product> getAllProducts() throws CategoryException, ProductException;
 
@@ -19,7 +19,7 @@ public interface ProductService {
 	Product removeProduct(Integer id) throws CategoryException, ProductException;
 
 	String removeAllProducts() throws ProductException;
-	
 
-	
+	List<Product> listProductsByCategoryId(Integer categoryId ) throws CategoryException, ProductException;
+
 }

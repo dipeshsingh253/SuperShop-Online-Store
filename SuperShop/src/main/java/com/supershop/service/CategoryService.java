@@ -23,6 +23,6 @@ public interface CategoryService {
 
 	String removeAllCategories() throws CategoryException, UserException;
 	
-	Set<Product> getProductsByCategory(String name) throws CategoryException, ProductException, UserException;
+//	Set<Product> getProductsByCategory(String name) throws CategoryException, ProductException, UserException;
 
 }
