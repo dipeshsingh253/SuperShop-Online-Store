@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class AddToCartDto {
+public class CartDto {
 
 	private Integer userId;
 	private String productName;
