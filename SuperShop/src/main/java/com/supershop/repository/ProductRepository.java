@@ -13,7 +13,9 @@ import com.supershop.model.Product;
 public interface ProductRepository extends JpaRepository<Product, Integer> {
 
 	List<Product> findByCart(Cart cart);
-	
+
 	List<Product> findByCategory(Category category);
+
+	Product findByName(String name);
 
 }

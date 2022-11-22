@@ -1,7 +1,11 @@
 package com.supershop.service;
 
+import java.util.List;
+
 import com.supershop.dto.UserDto;
+import com.supershop.exception.CartException;
 import com.supershop.exception.UserException;
+import com.supershop.model.Cart;
 import com.supershop.model.User;
 
 public interface UserService {
@@ -14,6 +18,8 @@ public interface UserService {
 
 	User getUserById(Integer userId) throws UserException;
 
-	User getAllUsers() throws UserException;
+	List<User> getAllUsers() throws UserException;
+
+	Cart getCartByUserId(Integer userId) throws UserException, CartException;
 
 }

@@ -1,13 +1,13 @@
 package com.supershop.service;
 
 import java.util.List;
-import java.util.Set;
+//import java.util.Set;
 
 import com.supershop.exception.CategoryException;
-import com.supershop.exception.ProductException;
+//import com.supershop.exception.ProductException;
 import com.supershop.exception.UserException;
 import com.supershop.model.Category;
-import com.supershop.model.Product;
+//import com.supershop.model.Product;
 
 public interface CategoryService {
 

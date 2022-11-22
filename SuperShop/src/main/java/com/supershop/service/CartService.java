@@ -12,8 +12,8 @@ public interface CartService {
 
 	Cart removeItemFromCart(CartDto cartDto) throws CartException, UserException, ProductException;
 
-	Cart upadteCartItem(CartDto cartDto) throws CartException, UserException, ProductException;
+	Cart upadteCartItem(CartDto cartDto, Integer quantity) throws CartException, UserException, ProductException;
 
-	Cart clearCart(CartDto cartDto) throws CartException, UserException;
+	Cart clearCart(CartDto cartDto) throws CartException, UserException, ProductException;
 
 }

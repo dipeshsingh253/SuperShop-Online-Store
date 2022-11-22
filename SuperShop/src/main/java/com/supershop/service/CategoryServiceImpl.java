@@ -1,18 +1,18 @@
 package com.supershop.service;
 
-import java.util.ArrayList;
+//import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
+//import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.supershop.exception.CategoryException;
-import com.supershop.exception.ProductException;
+//import com.supershop.exception.ProductException;
 import com.supershop.exception.UserException;
 import com.supershop.model.Category;
-import com.supershop.model.Product;
+//import com.supershop.model.Product;
 import com.supershop.repository.CategoryRepository;
 
 @Service
