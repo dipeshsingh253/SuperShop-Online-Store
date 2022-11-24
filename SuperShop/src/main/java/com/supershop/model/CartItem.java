@@ -4,20 +4,28 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Data
+
+@Entity
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity
-public class Category {
-
+@Data
+public class CartItem {
+	
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
-	private String name;
+	
+	@ManyToOne
+	@JoinColumn(name = "product_id",referencedColumnName = "id")
+	private Product product;
+	private Integer quantity;
+//	private Cart cart;
 
 }

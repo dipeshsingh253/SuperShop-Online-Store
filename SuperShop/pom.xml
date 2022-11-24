@@ -11,7 +11,7 @@
 	<artifactId>SuperShop</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>SuperShop</name>
-	<description>Super Shop is an online e-commerce store.</description>
+	<description>description</description>
 	<properties>
 		<java.version>17</java.version>
 	</properties>
@@ -51,12 +51,13 @@
 			<scope>test</scope>
 		</dependency>
 
-
 		<dependency>
 			<groupId>io.springfox</groupId>
 			<artifactId>springfox-boot-starter</artifactId>
 			<version>3.0.0</version>
 		</dependency>
+
+
 	</dependencies>
 
 	<build>

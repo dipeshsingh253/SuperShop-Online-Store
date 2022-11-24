@@ -11,94 +11,53 @@ import org.springframework.web.context.request.WebRequest;
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
-	@ExceptionHandler(UserException.class)
-	public ResponseEntity<MyErrorDetails> userExceptionHandler(UserException e, WebRequest request) {
+	@ExceptionHandler(Exception.class)
+	public ResponseEntity<MyErroDetails> exceptionHandler(Exception exception, WebRequest request) {
 
-		MyErrorDetails myErrorDetails = new MyErrorDetails();
+		MyErroDetails myErroDetails = new MyErroDetails(exception.getMessage(), request.getDescription(false),
+				LocalDateTime.now());
 
-		myErrorDetails.setMessage(e.getMessage());
-		myErrorDetails.setTimeStamp(LocalDateTime.now());
-		myErrorDetails.setDescription(request.getDescription(false));
-
-		return new ResponseEntity<MyErrorDetails>(myErrorDetails, HttpStatus.BAD_REQUEST);
+		return new ResponseEntity<MyErroDetails>(myErroDetails, HttpStatus.BAD_REQUEST);
 
 	}
 
-	@ExceptionHandler(CartException.class)
-	public ResponseEntity<MyErrorDetails> cartExceptionHandler(CartException e, WebRequest request) {
+	@ExceptionHandler(UserException.class)
+	public ResponseEntity<MyErroDetails> exceptionHandler(UserException exception, WebRequest request) {
 
-		MyErrorDetails myErrorDetails = new MyErrorDetails();
+		MyErroDetails myErroDetails = new MyErroDetails(exception.getMessage(), request.getDescription(false),
+				LocalDateTime.now());
 
-		myErrorDetails.setMessage(e.getMessage());
-		myErrorDetails.setTimeStamp(LocalDateTime.now());
-		myErrorDetails.setDescription(request.getDescription(false));
+		return new ResponseEntity<MyErroDetails>(myErroDetails, HttpStatus.BAD_REQUEST);
 
-		return new ResponseEntity<MyErrorDetails>(myErrorDetails, HttpStatus.BAD_REQUEST);
+	}
+
+	@ExceptionHandler(CurrentUserServiceException.class)
+	public ResponseEntity<MyErroDetails> exceptionHandler(CurrentUserServiceException exception, WebRequest request) {
+
+		MyErroDetails myErroDetails = new MyErroDetails(exception.getMessage(), request.getDescription(false),
+				LocalDateTime.now());
+
+		return new ResponseEntity<MyErroDetails>(myErroDetails, HttpStatus.BAD_REQUEST);
 
 	}
 
 	@ExceptionHandler(CategoryException.class)
-	public ResponseEntity<MyErrorDetails> categoryExceptionHandler(CategoryException e, WebRequest request) {
+	public ResponseEntity<MyErroDetails> exceptionHandler(CategoryException exception, WebRequest request) {
 
-		MyErrorDetails myErrorDetails = new MyErrorDetails();
+		MyErroDetails myErroDetails = new MyErroDetails(exception.getMessage(), request.getDescription(false),
+				LocalDateTime.now());
 
-		myErrorDetails.setMessage(e.getMessage());
-		myErrorDetails.setTimeStamp(LocalDateTime.now());
-		myErrorDetails.setDescription(request.getDescription(false));
-
-		return new ResponseEntity<MyErrorDetails>(myErrorDetails, HttpStatus.BAD_REQUEST);
-
-	}
-
-	@ExceptionHandler(OrderException.class)
-	public ResponseEntity<MyErrorDetails> userExceptionHandler(OrderException e, WebRequest request) {
-
-		MyErrorDetails myErrorDetails = new MyErrorDetails();
-
-		myErrorDetails.setMessage(e.getMessage());
-		myErrorDetails.setTimeStamp(LocalDateTime.now());
-		myErrorDetails.setDescription(request.getDescription(false));
-
-		return new ResponseEntity<MyErrorDetails>(myErrorDetails, HttpStatus.BAD_REQUEST);
-
-	}
-
-	@ExceptionHandler(PaymentException.class)
-	public ResponseEntity<MyErrorDetails> paymentExceptionHandler(PaymentException e, WebRequest request) {
-
-		MyErrorDetails myErrorDetails = new MyErrorDetails();
-
-		myErrorDetails.setMessage(e.getMessage());
-		myErrorDetails.setTimeStamp(LocalDateTime.now());
-		myErrorDetails.setDescription(request.getDescription(false));
-
-		return new ResponseEntity<MyErrorDetails>(myErrorDetails, HttpStatus.BAD_REQUEST);
+		return new ResponseEntity<MyErroDetails>(myErroDetails, HttpStatus.BAD_REQUEST);
 
 	}
 
 	@ExceptionHandler(ProductException.class)
-	public ResponseEntity<MyErrorDetails> productExceptionHandler(ProductException e, WebRequest request) {
+	public ResponseEntity<MyErroDetails> exceptionHandler(ProductException exception, WebRequest request) {
 
-		MyErrorDetails myErrorDetails = new MyErrorDetails();
+		MyErroDetails myErroDetails = new MyErroDetails(exception.getMessage(), request.getDescription(false),
+				LocalDateTime.now());
 
-		myErrorDetails.setMessage(e.getMessage());
-		myErrorDetails.setTimeStamp(LocalDateTime.now());
-		myErrorDetails.setDescription(request.getDescription(false));
-
-		return new ResponseEntity<MyErrorDetails>(myErrorDetails, HttpStatus.BAD_REQUEST);
-
-	}
-
-	@ExceptionHandler(Exception.class)
-	public ResponseEntity<MyErrorDetails> exceptionHandler(Exception e, WebRequest request) {
-
-		MyErrorDetails myErrorDetails = new MyErrorDetails();
-
-		myErrorDetails.setMessage(e.getMessage());
-		myErrorDetails.setTimeStamp(LocalDateTime.now());
-		myErrorDetails.setDescription(request.getDescription(false));
-
-		return new ResponseEntity<MyErrorDetails>(myErrorDetails, HttpStatus.BAD_REQUEST);
+		return new ResponseEntity<MyErroDetails>(myErroDetails, HttpStatus.BAD_REQUEST);
 
 	}
 

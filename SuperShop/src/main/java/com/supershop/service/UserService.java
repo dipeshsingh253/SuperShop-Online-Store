@@ -2,24 +2,22 @@ package com.supershop.service;
 
 import java.util.List;
 
-import com.supershop.dto.UserDto;
-import com.supershop.exception.CartException;
+import com.supershop.exception.CurrentUserServiceException;
 import com.supershop.exception.UserException;
-import com.supershop.model.Cart;
 import com.supershop.model.User;
 
 public interface UserService {
 
-	User registerUser(UserDto userDto) throws UserException;
+	public void registerUser(User user) throws UserException;
 
-	User updateUser(UserDto userDto) throws UserException;
+	public List<User> listAllUsers(String authenticationToken) throws UserException, CurrentUserServiceException;
+	
+	public void updateUser(User user, String authenticationToken) throws UserException, CurrentUserServiceException;
+	
+	public void deleteUser(String email, String authenticationToken) throws UserException, CurrentUserServiceException ;
 
-	User removeUser(Integer userId) throws UserException;
+	boolean isLoggedIn(String authenticationToken);
 
-	User getUserById(Integer userId) throws UserException;
-
-	List<User> getAllUsers() throws UserException;
-
-	Cart getCartByUserId(Integer userId) throws UserException, CartException;
+	boolean isAdmin(String authenticationToken) throws CurrentUserServiceException;
 
 }

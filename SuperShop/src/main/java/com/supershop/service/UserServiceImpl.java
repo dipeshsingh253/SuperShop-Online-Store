@@ -1,17 +1,17 @@
 package com.supershop.service;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.supershop.dto.UserDto;
-import com.supershop.exception.CartException;
+import com.supershop.exception.CurrentUserServiceException;
 import com.supershop.exception.UserException;
 import com.supershop.model.Cart;
+import com.supershop.model.CurrenUserSession;
 import com.supershop.model.User;
 import com.supershop.repository.CartRepository;
+import com.supershop.repository.CurrentUserSessionRepository;
 import com.supershop.repository.UserRepository;
 
 @Service
@@ -23,106 +23,138 @@ public class UserServiceImpl implements UserService {
 	@Autowired
 	private CartRepository cartRepository;
 
-	@Override
-	public User registerUser(UserDto userDto) throws UserException {
+	@Autowired
+	private CurrentUserSessionRepository currentUserSessionRepository;
 
-		User existedUser = userRepository.findByEmail(userDto.getEmail());
+	@Override
+	public void registerUser(User user) throws UserException {
+
+		User existedUser = userRepository.findByEmail(user.getEmail());
 
 		if (existedUser != null) {
-			throw new UserException("User Already Exists");
+			throw new UserException("User already exists with given email :" + user.getEmail());
 		}
 
-		User user = new User();
-
-		user.setFirstName(userDto.getFirstName());
-		user.setLastName(userDto.getLastName());
-		user.setEmail(userDto.getEmail());
-		user.setPassword(userDto.getPassword());
-		user.setRole(userDto.getRole());
 		Cart cart = new Cart();
-		user.setCart(cart);
+
 		cartRepository.save(cart);
+		user.setCart(cart);
 		userRepository.save(user);
 
+		System.out.println("User Saved Successfully");
 
-		return user;
 	}
 
 	@Override
-	public User updateUser(UserDto userDto) throws UserException {
-		User existedUser = userRepository.findByEmail(userDto.getEmail());
+	public List<User> listAllUsers(String authenticationToken) throws UserException, CurrentUserServiceException {
 
-		if (existedUser == null) {
-			throw new UserException("User does not Exists");
+		if (!isLoggedIn(authenticationToken)) {
+			throw new CurrentUserServiceException("login required");
 		}
 
-		existedUser.setFirstName(userDto.getFirstName());
-		existedUser.setLastName(userDto.getLastName());
-		existedUser.setEmail(userDto.getEmail());
-		existedUser.setRole(userDto.getRole());
-
-		return userRepository.save(existedUser);
-	}
-
-	@Override
-	public User removeUser(Integer userId) throws UserException {
-
-		Optional<User> optional = userRepository.findById(userId);
-
-		if (optional.isEmpty()) {
-			throw new UserException("User does not Exists");
+		if (!isAdmin(authenticationToken)) {
+			throw new UserException("You are not allowed to perform this action");
 		}
-
-		User deleteUser = optional.get();
-
-		userRepository.delete(deleteUser);
-
-		return deleteUser;
-	}
-
-	@Override
-	public User getUserById(Integer userId) throws UserException {
-
-		Optional<User> optional = userRepository.findById(userId);
-
-		if (optional.isEmpty()) {
-			throw new UserException("User does not Exists");
-		}
-
-		User user = optional.get();
-
-		return user;
-	}
-
-	@Override
-	public List<User> getAllUsers() throws UserException {
 
 		List<User> users = userRepository.findAll();
 
 		if (users.isEmpty()) {
-			throw new UserException("No users available");
+			throw new UserException("No users exists");
 		}
 
 		return users;
+
 	}
 
 	@Override
-	public Cart getCartByUserId(Integer userId) throws UserException, CartException {
+	public void updateUser(User user, String authenticationToken) throws UserException, CurrentUserServiceException {
 
-		Optional<User> optional = userRepository.findById(userId);
-
-		if (optional.isEmpty()) {
-			throw new UserException("User does not Exists");
-		}
-		User user = optional.get();
-
-		Cart cart = user.getCart();
-
-		if (cart == null) {
-			throw new CartException("Cart does not exists");
+		if (!isLoggedIn(authenticationToken)) {
+			throw new CurrentUserServiceException("Login required");
 		}
 
-		return cart;
+		if (isAdmin(authenticationToken)) {
+
+			User existedUser = userRepository.findByEmail(user.getEmail());
+
+			if (existedUser == null) {
+				throw new UserException("User does not exists with given email : " + user.getEmail());
+			}
+
+			userRepository.save(user);
+
+			System.out.println("User updated by admin successfully");
+		} else {
+
+			CurrenUserSession currenUserSession = currentUserSessionRepository.findByEmail(user.getEmail());
+
+			if (!currenUserSession.getAuthenticationToken().equals(authenticationToken)) {
+				throw new CurrentUserServiceException("Chaeck user email id");
+			}
+
+			userRepository.save(user);
+
+		}
+
+	}
+
+	@Override
+	public void deleteUser(String email, String authenticationToken) throws UserException, CurrentUserServiceException {
+		if (!isLoggedIn(authenticationToken)) {
+			throw new CurrentUserServiceException("Login required");
+		}
+
+		if (isAdmin(authenticationToken)) {
+
+			User existedUser = userRepository.findByEmail(email);
+
+			if (existedUser == null) {
+				throw new UserException("User does not exists with given email : " + email);
+			}
+
+			userRepository.delete(existedUser);
+
+			System.out.println("User deletd by admin successfully");
+		} else {
+
+			CurrenUserSession currenUserSession = currentUserSessionRepository.findByEmail(email);
+
+			if (!currenUserSession.getAuthenticationToken().equals(authenticationToken)) {
+				throw new CurrentUserServiceException("Chaeck user email id");
+			}
+
+			currentUserSessionRepository.delete(currenUserSession);
+			userRepository.delete(userRepository.findByEmail(email));
+
+		}
+
+	}
+
+	@Override
+	public boolean isLoggedIn(String authenticationToken) {
+
+		CurrenUserSession currenUserSession = currentUserSessionRepository
+				.findByAuthenticationToken(authenticationToken);
+
+		if (currenUserSession == null) {
+			return false;
+		}
+
+		return true;
+
+	}
+
+	@Override
+	public boolean isAdmin(String authenticationToken) throws CurrentUserServiceException {
+
+		CurrenUserSession currenUserSession = currentUserSessionRepository
+				.findByAuthenticationToken(authenticationToken);
+
+		if (currenUserSession.getRole().equals("admin")) {
+			return true;
+		}
+
+		return false;
 	}
 
 }

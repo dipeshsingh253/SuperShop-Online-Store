@@ -1,20 +1,25 @@
 package com.supershop.service;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.supershop.exception.CategoryException;
 import com.supershop.exception.ProductException;
+import com.supershop.exception.UserException;
 import com.supershop.model.Category;
+import com.supershop.model.CurrenUserSession;
 import com.supershop.model.Product;
 import com.supershop.repository.CategoryRepository;
+import com.supershop.repository.CurrentUserSessionRepository;
 import com.supershop.repository.ProductRepository;
 
 @Service
 public class ProductServiceImpl implements ProductService {
+
+	@Autowired
+	private CurrentUserSessionRepository currentUserSessionRepository;
 
 	@Autowired
 	private ProductRepository productRepository;
@@ -23,122 +28,114 @@ public class ProductServiceImpl implements ProductService {
 	private CategoryRepository categoryRepository;
 
 	@Override
-	public Product addProduct(Product product) throws CategoryException, ProductException {
+	public void createProduct(Product product, String authenticationToken)
+			throws UserException, ProductException, CategoryException {
 
-		Category category = product.getCategory();
+		if (isLoggedIn(authenticationToken) && isAdmin(authenticationToken)) {
 
-		Optional<Category> optionalCategory = categoryRepository.findById(category.getId());
+			Category category = categoryRepository.findById(product.getCategory().getId()).get();
 
-		if (optionalCategory.isEmpty()) {
-			throw new ProductException("Category does not exist");
+			if (category == null) {
+				throw new CategoryException("Category does not exist with given id : " + product.getCategory().getId());
+			}
+
+			Product existedProduct = productRepository.findByName(product.getName());
+
+			if (existedProduct != null) {
+				throw new ProductException("Product already exist");
+			}
+
+			productRepository.save(product);
+
+		} else {
+			throw new UserException("You don't have access to perform this operation or log in as an admin");
 		}
 
-		Optional<Product> optionalProduct = productRepository.findById(product.getId());
-
-		if (!optionalProduct.isEmpty()) {
-			throw new ProductException("Product already exist");
-		}
-
-		return productRepository.save(product);
 	}
 
 	@Override
-	public Product updateProduct(Product product) throws CategoryException, ProductException {
+	public void updateProduct(Product product, String authenticationToken)
+			throws UserException, ProductException, CategoryException {
+		if (isLoggedIn(authenticationToken) && isAdmin(authenticationToken)) {
 
-		Category category = product.getCategory();
+			Category category = categoryRepository.findById(product.getCategory().getId()).get();
 
-		Optional<Category> optionalCategory = categoryRepository.findById(category.getId());
+			if (category == null) {
+				throw new CategoryException("Category does not exist with given id : " + product.getCategory().getId());
+			}
 
-		if (optionalCategory.isEmpty()) {
-			throw new ProductException("Category does not exist");
+			Product existedProduct = productRepository.findById(product.getId()).get();
+
+			if (existedProduct == null) {
+				throw new ProductException("Product does not exist");
+			}
+
+			productRepository.save(product);
+
+		} else {
+			throw new UserException("You don't have access to perform this operation or log in as an admin");
 		}
-		Optional<Product> optionalProduct = productRepository.findById(product.getId());
-
-		if (optionalProduct.isEmpty()) {
-			throw new ProductException("Product does not exist");
-		}
-
-		return productRepository.save(product);
 	}
 
 	@Override
-	public List<Product> getAllProducts() throws CategoryException, ProductException {
+	public List<Product> listAllPrdoucts(String authenticationToken) throws ProductException, UserException {
+		if (isLoggedIn(authenticationToken) && isAdmin(authenticationToken)) {
 
-		List<Product> products = productRepository.findAll();
+			List<Product> products = productRepository.findAll();
 
-		if (products.isEmpty()) {
-			throw new ProductException("No Products Available");
+			if (products.isEmpty()) {
+				throw new ProductException("No products Available");
+			}
+
+			return products;
+
+		} else {
+			throw new UserException("You don't have access to perform this operation or log in as an admin");
 		}
-
-		return products;
 	}
 
 	@Override
-	public Product getProductById(Integer id) throws CategoryException, ProductException {
+	public void deleteProduct(Integer productId, String authenticationToken) throws ProductException, UserException {
+		if (isLoggedIn(authenticationToken) && isAdmin(authenticationToken)) {
 
-		Optional<Product> optionalProduct = productRepository.findById(id);
+			Product existedProduct = productRepository.findById(productId).get();
 
-		if (optionalProduct.isEmpty()) {
-			throw new ProductException("Product does not exist");
+			if (existedProduct == null) {
+				throw new ProductException("Product does not exist");
+			}
+
+			productRepository.delete(existedProduct);
+
+		} else {
+			throw new UserException("You don't have access to perform this operation or log in as an admin");
 		}
-
-		Product product = optionalProduct.get();
-
-		Category category = product.getCategory();
-
-		Optional<Category> optionalCategory = categoryRepository.findById(category.getId());
-
-		if (optionalCategory.isEmpty()) {
-			throw new ProductException("Category does not exist");
-		}
-
-		return product;
 	}
 
 	@Override
-	public Product removeProduct(Integer id) throws CategoryException, ProductException {
+	public boolean isLoggedIn(String authenticationToken) {
 
-		Optional<Product> optionalProduct = productRepository.findById(id);
+		CurrenUserSession currenUserSession = currentUserSessionRepository
+				.findByAuthenticationToken(authenticationToken);
 
-		if (optionalProduct.isEmpty()) {
-			throw new ProductException("Product does not exist");
+		if (currenUserSession == null) {
+			return false;
 		}
 
-		Product product = optionalProduct.get();
+		return true;
 
-		Category category = product.getCategory();
-
-		Optional<Category> optionalCategory = categoryRepository.findById(category.getId());
-
-		if (optionalCategory.isEmpty()) {
-			throw new ProductException("Category does not exist");
-		}
-
-		productRepository.delete(product);
-
-		return product;
 	}
 
 	@Override
-	public String removeAllProducts() throws ProductException {
-		productRepository.deleteAll();
-		return "All Products removed successfully";
-	}
+	public boolean isAdmin(String authenticationToken) {
 
-	@Override
-	public List<Product> listProductsByCategoryId(Integer categoryId) throws CategoryException, ProductException {
+		CurrenUserSession currenUserSession = currentUserSessionRepository
+				.findByAuthenticationToken(authenticationToken);
 
-		Optional<Category> optionalCategory = categoryRepository.findById(categoryId);
-
-		if (optionalCategory.isEmpty()) {
-			throw new CategoryException("no category available for given id " + categoryId);
+		if (currenUserSession.getRole().equals("admin")) {
+			return true;
 		}
 
-		Category category = optionalCategory.get();
-
-		List<Product> products = productRepository.findByCategory(category);
-
-		return products;
+		return false;
 	}
 
 }

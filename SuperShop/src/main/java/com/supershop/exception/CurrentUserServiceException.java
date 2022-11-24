@@ -1,13 +1,13 @@
 package com.supershop.exception;
 
-public class CategoryException extends Exception {
+public class CurrentUserServiceException extends Exception {
 
-	public CategoryException() {
+	public CurrentUserServiceException() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
 
-	public CategoryException(String message) {
+	public CurrentUserServiceException(String message) {
 		super(message);
 		// TODO Auto-generated constructor stub
 	}

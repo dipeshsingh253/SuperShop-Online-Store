@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.supershop.exception.CategoryException;
 import com.supershop.exception.ProductException;
+import com.supershop.exception.UserException;
 import com.supershop.model.Product;
 import com.supershop.service.ProductService;
 
@@ -26,67 +27,42 @@ public class ProductController {
 	private ProductService productService;
 
 	@PostMapping("/products")
-	public ResponseEntity<Product> addProduct(@RequestBody Product product) throws CategoryException, ProductException {
+	public ResponseEntity<String> createProduct(@RequestParam String token, @RequestBody Product product)
+			throws UserException, ProductException, CategoryException {
 
-		Product savedProduct = productService.addProduct(product);
+		productService.createProduct(product, token);
 
-		return new ResponseEntity<Product>(savedProduct, HttpStatus.ACCEPTED);
+		return new ResponseEntity<String>("Product Created", HttpStatus.ACCEPTED);
 
 	}
 
 	@PutMapping("/products")
-	public ResponseEntity<Product> updateProduct(@RequestBody Product product)
-			throws CategoryException, ProductException {
+	public ResponseEntity<String> updateProduct(@RequestParam String token, @RequestBody Product product)
+			throws UserException, ProductException, CategoryException {
 
-		Product updatedProduct = productService.updateProduct(product);
+		productService.updateProduct(product, token);
 
-		return new ResponseEntity<Product>(updatedProduct, HttpStatus.ACCEPTED);
+		return new ResponseEntity<String>("Product Updated", HttpStatus.ACCEPTED);
 
 	}
 
 	@GetMapping("/products")
-	public ResponseEntity<List<Product>> getAllProducts() throws CategoryException, ProductException {
+	public ResponseEntity<List<Product>> listAllProducts(@RequestParam String token)
+			throws UserException, ProductException {
 
-		List<Product> products = productService.getAllProducts();
+		List<Product> products = productService.listAllPrdoucts(token);
 
 		return new ResponseEntity<List<Product>>(products, HttpStatus.OK);
-
-	}
-
-	@GetMapping("/products/{id}")
-	public ResponseEntity<Product> getProductByid(@PathVariable("id") Integer id)
-			throws CategoryException, ProductException {
-
-		Product product = productService.getProductById(id);
-
-		return new ResponseEntity<Product>(product, HttpStatus.OK);
 
 	}
 
 	@DeleteMapping("/products/{id}")
-	public ResponseEntity<Product> deleteProductById(@PathVariable("id") Integer id)
-			throws CategoryException, ProductException {
+	public ResponseEntity<String> deleteProduct(@PathVariable("id") Integer id, @RequestParam String token)
+			throws UserException, ProductException {
 
-		Product deletedProduct = productService.removeProduct(id);
+		productService.deleteProduct(id, token);
 
-		return new ResponseEntity<Product>(deletedProduct, HttpStatus.OK);
-
-	}
-
-	@DeleteMapping("/products")
-	public ResponseEntity<String> deleteProducts() throws ProductException {
-
-		String message = productService.removeAllProducts();
-
-		return new ResponseEntity<String>(message, HttpStatus.OK);
-	}
-
-	@GetMapping("/products/category/{categoryId}")
-	public ResponseEntity<List<Product>> getProductsByCategoryId(@PathVariable("categoryId") Integer categoryid) throws CategoryException, ProductException {
-
-		List<Product> products = productService.listProductsByCategoryId(categoryid);
-
-		return new ResponseEntity<List<Product>>(products, HttpStatus.OK);
+		return new ResponseEntity<String>("Product deleted", HttpStatus.OK);
 
 	}
 

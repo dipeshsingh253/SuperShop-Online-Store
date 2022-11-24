@@ -1,120 +1,128 @@
 package com.supershop.service;
 
-//import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
-//import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.supershop.exception.CategoryException;
-//import com.supershop.exception.ProductException;
 import com.supershop.exception.UserException;
 import com.supershop.model.Category;
-//import com.supershop.model.Product;
+import com.supershop.model.CurrenUserSession;
 import com.supershop.repository.CategoryRepository;
+import com.supershop.repository.CurrentUserSessionRepository;
 
 @Service
 public class CategoryServiceImpl implements CategoryService {
 
 	@Autowired
+	private CurrentUserSessionRepository currentUserSessionRepository;
+
+	@Autowired
 	private CategoryRepository categoryRepository;
 
 	@Override
-	public Category addCategory(Category category) throws CategoryException, UserException {
+	public void createCategory(Category category, String authenticationToken) throws CategoryException, UserException {
 
-		Optional<Category> optional = categoryRepository.findById(category.getId());
+		if (isLoggedIn(authenticationToken) && isAdmin(authenticationToken)) {
 
-		if (!optional.isEmpty()) {
-			throw new CategoryException("category already exist");
+			Category existedCategory = categoryRepository.findByName(category.getName());
+
+			if (existedCategory != null) {
+				throw new CategoryException("Category already exists");
+			}
+
+			categoryRepository.save(category);
+
+			System.out.println("Category saved ");
+
+		} else {
+			throw new UserException("You are not allowed to perform this operation");
 		}
 
-		return categoryRepository.save(category);
 	}
 
 	@Override
-	public Category updateCategory(Category category) throws CategoryException, UserException {
+	public void updateCategory(Category category, String authenticationToken) throws CategoryException, UserException {
+		if (isLoggedIn(authenticationToken) && isAdmin(authenticationToken)) {
 
-		Optional<Category> optional = categoryRepository.findById(category.getId());
+			Category existedCategory = categoryRepository.findById(category.getId()).get();
 
-		if (optional.isEmpty()) {
-			throw new CategoryException("category does not exist");
+			if (existedCategory == null) {
+				throw new CategoryException("Category does not exists");
+			}
+
+			categoryRepository.save(category);
+
+			System.out.println("Category updated");
+
+		} else {
+			throw new UserException("You are not allowed to perform this operation");
 		}
 
-		return categoryRepository.save(category);
 	}
 
 	@Override
-	public List<Category> getAllCategory() throws CategoryException, UserException {
-		List<Category> categories = categoryRepository.findAll();
-		if (categories.isEmpty()) {
-			throw new CategoryException("No Categories available");
-		}
+	public void deleteCategory(Integer categoryId, String authenticationToken) throws CategoryException, UserException {
+		if (isLoggedIn(authenticationToken) && isAdmin(authenticationToken)) {
 
-		return categories;
+			Category existedCategory = categoryRepository.findById(categoryId).get();
+
+			if (existedCategory == null) {
+				throw new CategoryException("Category does not exists");
+			}
+
+			categoryRepository.delete(existedCategory);
+
+			System.out.println("Category deleted");
+
+		} else {
+			throw new UserException("You are not allowed to perform this operation");
+		}
 	}
 
 	@Override
-	public Category getCategoryById(Integer categoryId) throws CategoryException, UserException {
+	public List<Category> listAllCategories(String authenticationToken) throws CategoryException, UserException {
+		if (isLoggedIn(authenticationToken) && isAdmin(authenticationToken)) {
 
-		Optional<Category> optional = categoryRepository.findById(categoryId);
+			List<Category> categories = categoryRepository.findAll();
 
-		if (optional.isEmpty()) {
-			throw new CategoryException("category does not exist");
+			if (categories.isEmpty()) {
+				throw new CategoryException("No Categories available");
+			}
+
+			return categories;
+
+		} else {
+			throw new UserException("You are not allowed to perform this operation");
 		}
-
-		return optional.get();
 	}
 
 	@Override
-	public Category removeCategory(Integer categoryId) throws CategoryException, UserException {
+	public boolean isLoggedIn(String authenticationToken) {
 
-		Optional<Category> optional = categoryRepository.findById(categoryId);
+		CurrenUserSession currenUserSession = currentUserSessionRepository
+				.findByAuthenticationToken(authenticationToken);
 
-		if (optional.isEmpty()) {
-			throw new CategoryException("category does not exist");
+		if (currenUserSession == null) {
+			return false;
 		}
 
-		Category deletedCategory = optional.get();
+		return true;
 
-		categoryRepository.delete(deletedCategory);
-
-		return deletedCategory;
 	}
 
 	@Override
-	public String removeAllCategories() throws CategoryException, UserException {
+	public boolean isAdmin(String authenticationToken) {
 
-		categoryRepository.deleteAll();
+		CurrenUserSession currenUserSession = currentUserSessionRepository
+				.findByAuthenticationToken(authenticationToken);
 
-		return "Categories Removed Successfully";
+		if (currenUserSession.getRole().equals("admin")) {
+			return true;
+		}
+
+		return false;
 	}
-
-//	@Override
-//	public Set<Product> getProductsByCategory(String name) throws CategoryException, ProductException, UserException {
-//
-//		Category category = categoryRepository.findByName(name);
-//
-//		if (category == null) {
-//			throw new CategoryException("category does not exist with given name : " + name);
-//		}
-//
-////		List<Product> products = new ArrayList<>();
-////
-////		products.addAll(category.getProducts());
-////
-////		if (products.isEmpty()) {
-////			throw new ProductException("No Products available in category " + name);
-////		}
-//
-//		Set<Product> products = category.getProducts();
-//
-//		if (products.isEmpty()) {
-//			throw new ProductException("No Products available in category " + name);
-//		}
-//
-//		return products;
-//	}
 
 }

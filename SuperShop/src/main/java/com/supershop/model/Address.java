@@ -10,11 +10,14 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Payment {
+public class Address {
 
-	// private Integer id;
-	private String paymentStatus;
-	private String paymentMethod;
-	private Integer amount;
+	private String building;
+	private String society;
+	private String area;
+	private String city;
+	private String pincode;
+	private String state;
+	private String country;
 
 }
