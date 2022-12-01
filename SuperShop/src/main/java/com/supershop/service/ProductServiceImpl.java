@@ -8,8 +8,8 @@ import org.springframework.stereotype.Service;
 import com.supershop.exception.CategoryException;
 import com.supershop.exception.ProductException;
 import com.supershop.exception.UserException;
+import com.supershop.helper.Helper;
 import com.supershop.model.Category;
-import com.supershop.model.CurrenUserSession;
 import com.supershop.model.Product;
 import com.supershop.repository.CategoryRepository;
 import com.supershop.repository.CurrentUserSessionRepository;
@@ -31,7 +31,8 @@ public class ProductServiceImpl implements ProductService {
 	public void createProduct(Product product, String authenticationToken)
 			throws UserException, ProductException, CategoryException {
 
-		if (isLoggedIn(authenticationToken) && isAdmin(authenticationToken)) {
+		if (Helper.isLoggedIn(authenticationToken, currentUserSessionRepository)
+				&& Helper.isAdmin(authenticationToken, currentUserSessionRepository)) {
 
 			Category category = categoryRepository.findById(product.getCategory().getId()).get();
 
@@ -56,7 +57,8 @@ public class ProductServiceImpl implements ProductService {
 	@Override
 	public void updateProduct(Product product, String authenticationToken)
 			throws UserException, ProductException, CategoryException {
-		if (isLoggedIn(authenticationToken) && isAdmin(authenticationToken)) {
+		if (Helper.isLoggedIn(authenticationToken, currentUserSessionRepository)
+				&& Helper.isAdmin(authenticationToken, currentUserSessionRepository)) {
 
 			Category category = categoryRepository.findById(product.getCategory().getId()).get();
 
@@ -79,7 +81,8 @@ public class ProductServiceImpl implements ProductService {
 
 	@Override
 	public List<Product> listAllPrdoucts(String authenticationToken) throws ProductException, UserException {
-		if (isLoggedIn(authenticationToken) && isAdmin(authenticationToken)) {
+		if (Helper.isLoggedIn(authenticationToken, currentUserSessionRepository)
+				&& Helper.isAdmin(authenticationToken, currentUserSessionRepository)) {
 
 			List<Product> products = productRepository.findAll();
 
@@ -96,7 +99,8 @@ public class ProductServiceImpl implements ProductService {
 
 	@Override
 	public void deleteProduct(Integer productId, String authenticationToken) throws ProductException, UserException {
-		if (isLoggedIn(authenticationToken) && isAdmin(authenticationToken)) {
+		if (Helper.isLoggedIn(authenticationToken, currentUserSessionRepository)
+				&& Helper.isAdmin(authenticationToken, currentUserSessionRepository)) {
 
 			Product existedProduct = productRepository.findById(productId).get();
 
@@ -109,33 +113,6 @@ public class ProductServiceImpl implements ProductService {
 		} else {
 			throw new UserException("You don't have access to perform this operation or log in as an admin");
 		}
-	}
-
-	@Override
-	public boolean isLoggedIn(String authenticationToken) {
-
-		CurrenUserSession currenUserSession = currentUserSessionRepository
-				.findByAuthenticationToken(authenticationToken);
-
-		if (currenUserSession == null) {
-			return false;
-		}
-
-		return true;
-
-	}
-
-	@Override
-	public boolean isAdmin(String authenticationToken) {
-
-		CurrenUserSession currenUserSession = currentUserSessionRepository
-				.findByAuthenticationToken(authenticationToken);
-
-		if (currenUserSession.getRole().equals("admin")) {
-			return true;
-		}
-
-		return false;
 	}
 
 }

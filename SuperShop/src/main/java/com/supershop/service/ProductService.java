@@ -9,16 +9,14 @@ import com.supershop.model.Product;
 
 public interface ProductService {
 
-	public void createProduct(Product product, String authenticationToken) throws UserException, ProductException, CategoryException;
+	public void createProduct(Product product, String authenticationToken)
+			throws UserException, ProductException, CategoryException;
 
-	public void updateProduct(Product product, String authenticationToken) throws UserException, ProductException, CategoryException;
+	public void updateProduct(Product product, String authenticationToken)
+			throws UserException, ProductException, CategoryException;
 
 	public List<Product> listAllPrdoucts(String authenticationToken) throws UserException, ProductException;
 
 	public void deleteProduct(Integer productId, String authenticationToken) throws UserException, ProductException;
-
-	boolean isAdmin(String authenticationToken);
-
-	boolean isLoggedIn(String authenticationToken);
 
 }

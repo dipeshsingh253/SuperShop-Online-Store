@@ -8,9 +8,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class OrderDto {
-
+//for creating order id is not required but for updating orders id is mandatory
 	private Integer orderId;
 	private Integer userId;
 	private String paymentMethod;
+	private String orderStatus;
 
 }

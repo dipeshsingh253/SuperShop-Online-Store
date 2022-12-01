@@ -1,22 +1,26 @@
 package com.supershop.service;
 
-import java.util.Iterator;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.supershop.dto.CartDto;
+import com.supershop.dto.CartItemDto;
+import com.supershop.dto.ProductDto;
 import com.supershop.exception.CartException;
 import com.supershop.exception.CurrentUserServiceException;
 import com.supershop.exception.ProductException;
 import com.supershop.exception.UserException;
+import com.supershop.helper.Helper;
 import com.supershop.model.Cart;
-import com.supershop.model.CartItem;
-import com.supershop.model.CurrenUserSession;
+import com.supershop.model.CurrentUserSession;
 import com.supershop.model.Product;
 import com.supershop.model.User;
-import com.supershop.repository.CartItemRepository;
 import com.supershop.repository.CartRepository;
 import com.supershop.repository.CurrentUserSessionRepository;
 import com.supershop.repository.ProductRepository;
@@ -29,218 +33,209 @@ public class CartServiceImpl implements CartService {
 	private CurrentUserSessionRepository currentUserSessionRepository;
 
 	@Autowired
-	private CartRepository cartRepository;
+	private UserRepository userRepository;
 
 	@Autowired
-	private UserRepository userRepository;
+	private CartRepository cartRepository;
 
 	@Autowired
 	private ProductRepository productRepository;
 
-	@Autowired
-	private CartItemRepository cartItemRepository;
-
 	@Override
-	public void addItemToCart(CartDto cartDto, String authenticationToken)
+	public void addItemToCart(CartItemDto cartDto, String authenticationToken)
 			throws CartException, CurrentUserServiceException, UserException, ProductException {
 
-		if (!isLoggedIn(authenticationToken)) {
-			throw new CurrentUserServiceException("Login required");
+		if (!Helper.isLoggedIn(authenticationToken, currentUserSessionRepository)) {
+
+			System.out.println(authenticationToken);
+
+			throw new CurrentUserServiceException(" Log in required ");
+
 		}
 
-		CurrenUserSession currenUser = currentUserSessionRepository.findByAuthenticationToken(authenticationToken);
+		Optional<User> optionalUser = userRepository.findById(cartDto.getUserId());
 
-		User user = userRepository.findById(cartDto.getUserId()).get();
-
-		if (user == null) {
-			throw new UserException("User does not exists with : " + cartDto.getUserId());
+		if (optionalUser.isEmpty()) {
+			throw new UserException("No users exists with the given id" + cartDto.getUserId());
 		}
 
-		if (!user.getEmail().equals(currenUser.getEmail())) {
-			throw new UserException("Invalid action by user , Use your registered email address");
+		User user = optionalUser.get();
+
+		Optional<Product> optionalProduct = productRepository.findById(cartDto.getProductDto().getId());
+
+		if (optionalProduct.isEmpty()) {
+			throw new ProductException("Product Does not exists with given product id");
 		}
 
-		Product product = productRepository.findById(cartDto.getProductId()).get();
+		Product product = optionalProduct.get();
 
-		CartItem existedProduct = cartItemRepository.findByProduct(product);
+		Cart existedCart = cartRepository.findByUserAndProduct(user, product);
 
-		if (existedProduct != null) {
-			throw new CartException("Product Already exists in cart");
+		if (existedCart != null) {
+			throw new CartException("Product already exists in the cart");
 		}
 
-		if (product == null) {
-			throw new ProductException("Product does not exists with given id :" + cartDto.getProductId());
-		}
+		Cart newCart = new Cart();
 
-		if (product.getStock() < cartDto.getQantity()) {
-			throw new ProductException("Unsufficient products in stock...");
-		}
+		newCart.setCreateDateTime(LocalDateTime.now());
+		newCart.setQuantity(cartDto.getQantity());
+		newCart.setProduct(product);
+		newCart.setUser(user);
 
-		product.setStock(product.getStock() - cartDto.getQantity());
+		cartRepository.save(newCart);
 
-		CartItem cartItem = new CartItem();
-		cartItem.setProduct(product);
-		cartItem.setQuantity(cartDto.getQantity());
-
-		user.getCart().getCartItems().add(cartItem);
-
-		Cart userCart = user.getCart();
-		cartRepository.save(userCart);
-		userRepository.save(user);
-		System.out.println("Cart item created successfully");
-
-	}
-//
-//	@Override
-//	public void updateCart(Cart cart, String authenticationToken) throws CartException, CurrentUserServiceException {
-//
-//		if (!isLoggedIn(authenticationToken)) {
-//			throw new CurrentUserServiceException("Login required");
-//		}
-//
-//		CurrenUserSession currenUser = currentUserSessionRepository.findByAuthenticationToken(authenticationToken);
-//
-//		cartRepository.save(cart);
-//
-//	}
-
-	@Override
-	public void removeCartItem(CartDto cartDto, String authenticationToken)
-			throws CartException, CurrentUserServiceException, UserException, ProductException {
-
-		if (!isLoggedIn(authenticationToken)) {
-			throw new CurrentUserServiceException("Login required");
-		}
-
-		CurrenUserSession currenUser = currentUserSessionRepository.findByAuthenticationToken(authenticationToken);
-
-		User user = userRepository.findById(cartDto.getUserId()).get();
-
-		if (user == null) {
-			throw new UserException("User does not exists with : " + cartDto.getUserId());
-		}
-
-		if (!user.getEmail().equals(currenUser.getEmail())) {
-			throw new UserException("Invalid action by user , Use your registered email address");
-		}
-
-		Product product = productRepository.findById(cartDto.getProductId()).get();
-
-		if (product == null) {
-			throw new ProductException("Product does not exists with given id :" + cartDto.getProductId());
-		}
-
-		if (product.getStock() < cartDto.getQantity()) {
-			throw new ProductException("Unsufficient products in stock...");
-		}
-
-		product.setStock(product.getStock() - cartDto.getQantity());
-
-//		CartItem cartItem = new CartItem();
-//		cartItem.setProduct(product);
-//		cartItem.setQuantity(cartDto.getQantity());
-
-		CartItem cartItem = cartItemRepository.findByProduct(product);
-		cartItemRepository.delete(cartItem);
-//		List<CartItem> cartItems = user.getCart().getCartItems();
-//
-//		cartItems.remove(cartItems.indexOf(cartItem));
-
-		Cart userCart = user.getCart();
-		cartRepository.save(userCart);
-		userRepository.save(user);
-
-		System.out.println("Cart item removed successfully");
+		System.out.println("new item added to cart successfully");
 
 	}
 
 	@Override
-	public Cart getCartByUserId(Integer userId, String authenticationToken)
+	public void removeCartItem(CartItemDto cartDto, String authenticationToken)
+			throws CartException, CurrentUserServiceException, UserException, ProductException {
+
+		if (!Helper.isLoggedIn(authenticationToken, currentUserSessionRepository)) {
+
+			throw new CurrentUserServiceException(" Log in required ");
+
+		}
+
+		Optional<User> optionalUser = userRepository.findById(cartDto.getUserId());
+
+		if (optionalUser.isEmpty()) {
+			throw new UserException("No users exists with the given id" + cartDto.getUserId());
+		}
+
+		User user = optionalUser.get();
+
+		Optional<Product> optionalProduct = productRepository.findById(cartDto.getProductDto().getId());
+
+		if (optionalProduct.isEmpty()) {
+			throw new ProductException("Product Does not exists with given product id");
+		}
+		Product product = optionalProduct.get();
+
+		Cart existedCart = cartRepository.findByUserAndProduct(user, product);
+
+		if (existedCart == null) {
+			throw new CartException("Product does not exists in the cart");
+		}
+
+		cartRepository.delete(existedCart);
+		System.out.println("Product removed");
+
+	}
+
+	@Override
+	public CartDto getCartByUserId(Integer userId, String authenticationToken)
 			throws CartException, UserException, CurrentUserServiceException {
-		if (!isLoggedIn(authenticationToken)) {
-			throw new CurrentUserServiceException("Login required");
+
+		if (!Helper.isLoggedIn(authenticationToken, currentUserSessionRepository)) {
+
+			throw new CurrentUserServiceException(" Log in required ");
+
 		}
 
-		CurrenUserSession currenUser = currentUserSessionRepository.findByAuthenticationToken(authenticationToken);
+		Optional<User> optionalUser = userRepository.findById(userId);
 
-		User user = userRepository.findById(userId).get();
-
-		if (user == null) {
-			throw new UserException("User does not exists with : " + userId);
+		if (optionalUser.isEmpty()) {
+			throw new UserException("No users exists with the given id" + userId);
 		}
 
-		if (!user.getEmail().equals(currenUser.getEmail())) {
-			throw new UserException("Invalid action by user , Use your registered email address");
+		User user = optionalUser.get();
+
+		List<Cart> carts = cartRepository.findByUserOrderByCreateDateTimeDesc(user);
+
+		if (carts.isEmpty()) {
+			throw new CartException("Cart is empty");
+
+		}
+		CartDto cartDto = new CartDto();
+		List<CartItemDto> cartItems = new ArrayList<>();
+
+		Double totalAmount = 0.0;
+
+		for (Cart c : carts) {
+
+			Product p = c.getProduct();
+
+			ProductDto pDto = new ProductDto();
+
+			BeanUtils.copyProperties(p, pDto);
+
+			System.out.println(c);
+
+			CartItemDto cartItemDto = new CartItemDto();
+			cartItemDto.setUserId(c.getUser().getId());
+			cartItemDto.setQantity(c.getQuantity());
+			cartItemDto.setProductDto(pDto);
+			cartItemDto.setTotal(c.getProduct().getPrice() * c.getQuantity());
+
+			cartItems.add(cartItemDto);
+			totalAmount += cartItemDto.getTotal();
+
+		}
+		cartDto.setUserId(userId);
+
+		cartDto.setCartItems(cartItems);
+		cartDto.setTotalCost(totalAmount);
+
+		if (!Helper.isAdmin(authenticationToken, currentUserSessionRepository)) {
+
+			CurrentUserSession currentUserSession = currentUserSessionRepository
+					.findByAuthenticationToken(authenticationToken);
+
+			if (user.getEmail().equals(currentUserSession.getEmail())) {
+				return cartDto;
+			} else {
+				throw new CurrentUserServiceException("You are not allowed to perform this operation");
+			}
+
+		} else {
+
+			return cartDto;
 		}
 
-		return user.getCart();
 	}
 
 	@Override
-	public void updateCartItem(CartDto cartDto, String authenticationToken)
+	public void updateCartItem(CartItemDto cartDto, String authenticationToken)
 			throws CartException, CurrentUserServiceException, UserException, ProductException {
-		if (!isLoggedIn(authenticationToken)) {
-			throw new CurrentUserServiceException("Login required");
+
+		if (!Helper.isLoggedIn(authenticationToken, currentUserSessionRepository)) {
+
+			throw new CurrentUserServiceException(" Log in required ");
+
 		}
 
-		CurrenUserSession currenUser = currentUserSessionRepository.findByAuthenticationToken(authenticationToken);
+		Optional<User> optionalUser = userRepository.findById(cartDto.getUserId());
 
-		User user = userRepository.findById(cartDto.getUserId()).get();
-
-		if (user == null) {
-			throw new UserException("User does not exists with : " + cartDto.getUserId());
+		if (optionalUser.isEmpty()) {
+			throw new UserException("No users exists with the given id" + cartDto.getUserId());
 		}
 
-		if (!user.getEmail().equals(currenUser.getEmail())) {
-			throw new UserException("Invalid action by user , Use your registered email address");
+		User user = optionalUser.get();
+
+		Optional<Product> optionalProduct = productRepository.findById(cartDto.getProductDto().getId());
+
+		if (optionalProduct.isEmpty()) {
+			throw new ProductException("Product Does not exists with given product id");
+		}
+		Product product = optionalProduct.get();
+
+		Cart existedCart = cartRepository.findByUserAndProduct(user, product);
+
+		if (existedCart == null) {
+			throw new CartException("Product does not exists in the cart");
 		}
 
-		Product product = productRepository.findById(cartDto.getProductId()).get();
+		Cart newCart = new Cart();
+		newCart.setId(existedCart.getId());
+		newCart.setCreateDateTime(LocalDateTime.now());
+		newCart.setQuantity(cartDto.getQantity());
+		newCart.setProduct(product);
+		newCart.setUser(user);
 
-		CartItem cartItem = cartItemRepository.findByProduct(product);
+		cartRepository.save(newCart);
 
-		if (cartItem.getQuantity() > cartDto.getQantity()
-				&& product.getStock() > product.getStock() + cartItem.getQuantity() - cartDto.getQantity()) {
-			cartItem.setQuantity(cartDto.getQantity());
-			cartItemRepository.save(cartItem);
-			Cart userCart = user.getCart();
-			cartRepository.save(userCart);
-			userRepository.save(user);
-			product.setStock(product.getStock() + cartItem.getQuantity() - cartDto.getQantity());
-
-			System.out.println("Cart item updated successfully");
-			return;
-		}
-
-		if (product == null) {
-			throw new ProductException("Product does not exists with given id :" + cartDto.getProductId());
-		}
-
-		if (product.getStock() < cartDto.getQantity()) {
-			throw new ProductException("Unsufficient products in stock...");
-		}
-		product.setStock(product.getStock() - cartDto.getQantity());
-
-		cartItem.setQuantity(cartDto.getQantity());
-		cartItemRepository.save(cartItem);
-		Cart userCart = user.getCart();
-		cartRepository.save(userCart);
-		userRepository.save(user);
-
-		System.out.println("Cart item updated successfully");
 	}
 
-	@Override
-	public boolean isLoggedIn(String authenticationToken) {
-
-		CurrenUserSession currenUserSession = currentUserSessionRepository
-				.findByAuthenticationToken(authenticationToken);
-
-		if (currenUserSession == null) {
-			return false;
-		}
-
-		return true;
-
-	}
 }

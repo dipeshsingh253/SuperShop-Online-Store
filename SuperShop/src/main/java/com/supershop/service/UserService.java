@@ -11,13 +11,9 @@ public interface UserService {
 	public void registerUser(User user) throws UserException;
 
 	public List<User> listAllUsers(String authenticationToken) throws UserException, CurrentUserServiceException;
-	
+
 	public void updateUser(User user, String authenticationToken) throws UserException, CurrentUserServiceException;
-	
-	public void deleteUser(String email, String authenticationToken) throws UserException, CurrentUserServiceException ;
 
-	boolean isLoggedIn(String authenticationToken);
-
-	boolean isAdmin(String authenticationToken) throws CurrentUserServiceException;
+	public void deleteUser(String email, String authenticationToken) throws UserException, CurrentUserServiceException;
 
 }

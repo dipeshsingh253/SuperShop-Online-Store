@@ -1,18 +1,25 @@
 package com.supershop.dto;
 
-import com.supershop.model.CartItem;
+import java.util.List;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 public class CartDto {
 
 	private Integer userId;
-//	private CartItem cartItem;
-	private Integer productId;
-	private Integer qantity;
+
+	private List<CartItemDto> cartItems;
+
+	private Double totalCost;
+
+	private String paymentMethod;
+
 }

@@ -2,11 +2,11 @@ package com.supershop.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.supershop.model.CurrenUserSession;
+import com.supershop.model.CurrentUserSession;
 
-public interface CurrentUserSessionRepository extends JpaRepository<CurrenUserSession, Integer>{
+public interface CurrentUserSessionRepository extends JpaRepository<CurrentUserSession, Integer>{
 	
-	CurrenUserSession findByEmail(String email);
+	CurrentUserSession findByEmail(String email);
 	
-	CurrenUserSession findByAuthenticationToken(String token);
+	CurrentUserSession findByAuthenticationToken(String token);
 }

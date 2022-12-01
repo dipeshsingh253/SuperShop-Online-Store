@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class CurrenUserSession {
+public class CurrentUserSession {
 
 	@Id
 	private Integer userId;

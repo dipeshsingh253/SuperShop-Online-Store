@@ -2,6 +2,7 @@ package com.supershop.service;
 
 import java.util.List;
 
+import com.supershop.dto.CartDto;
 import com.supershop.dto.OrderDto;
 import com.supershop.exception.CartException;
 import com.supershop.exception.CurrentUserServiceException;
@@ -20,7 +21,4 @@ public interface OrderService {
 	public List<Order> listAllOrders(String authenticationToken)
 			throws OrderException, UserException, CurrentUserServiceException;
 
-	boolean isLoggedIn(String authenticationToken);
-
-	boolean isAdmin(String authenticationToken);
 }

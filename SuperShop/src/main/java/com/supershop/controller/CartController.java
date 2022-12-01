@@ -1,5 +1,7 @@
 package com.supershop.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.supershop.dto.CartDto;
+import com.supershop.dto.CartItemDto;
 import com.supershop.exception.CartException;
 import com.supershop.exception.CurrentUserServiceException;
 import com.supershop.exception.ProductException;
@@ -27,7 +30,8 @@ public class CartController {
 	private CartService cartService;
 
 	@PostMapping("/additemtocart")
-	public ResponseEntity<String> addItemToCart(@RequestParam String authenticationToken, @RequestBody CartDto cartDto)
+	public ResponseEntity<String> addItemToCart(@RequestParam String authenticationToken,
+			@RequestBody CartItemDto cartDto)
 			throws CartException, CurrentUserServiceException, UserException, ProductException {
 
 		cartService.addItemToCart(cartDto, authenticationToken);
@@ -37,7 +41,8 @@ public class CartController {
 	}
 
 	@PutMapping("/cart")
-	public ResponseEntity<String> updateCartItem(@RequestParam String authenticationToken, @RequestBody CartDto cartDto)
+	public ResponseEntity<String> updateCartItem(@RequestParam String authenticationToken,
+			@RequestBody CartItemDto cartDto)
 			throws CartException, CurrentUserServiceException, UserException, ProductException {
 
 		cartService.updateCartItem(cartDto, authenticationToken);
@@ -46,18 +51,19 @@ public class CartController {
 	}
 
 	@GetMapping("/carts/user/{id}")
-	public ResponseEntity<Cart> getCartByUserId(@PathVariable("id") Integer userId,
+	public ResponseEntity<CartDto> getCartByUserId(@PathVariable("id") Integer userId,
 			@RequestParam String authenticationToken) throws CartException, UserException, CurrentUserServiceException {
 
-		Cart userCart = cartService.getCartByUserId(userId, authenticationToken);
+		CartDto userCart = cartService.getCartByUserId(userId, authenticationToken);
 
-		return new ResponseEntity<Cart>(userCart, HttpStatus.OK);
+		return new ResponseEntity<CartDto>(userCart, HttpStatus.OK);
 
 	}
 
 	@DeleteMapping("/cart")
 	public ResponseEntity<String> removeItemFromcart(@RequestParam String authenticationToken,
-			@RequestBody CartDto cartDto) throws CartException, CurrentUserServiceException, UserException, ProductException {
+			@RequestBody CartItemDto cartDto)
+			throws CartException, CurrentUserServiceException, UserException, ProductException {
 
 		cartService.removeCartItem(cartDto, authenticationToken);
 

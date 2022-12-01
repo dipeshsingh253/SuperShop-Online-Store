@@ -7,8 +7,9 @@ import org.springframework.stereotype.Service;
 
 import com.supershop.exception.CategoryException;
 import com.supershop.exception.UserException;
+import com.supershop.helper.Helper;
 import com.supershop.model.Category;
-import com.supershop.model.CurrenUserSession;
+import com.supershop.model.CurrentUserSession;
 import com.supershop.repository.CategoryRepository;
 import com.supershop.repository.CurrentUserSessionRepository;
 
@@ -24,7 +25,8 @@ public class CategoryServiceImpl implements CategoryService {
 	@Override
 	public void createCategory(Category category, String authenticationToken) throws CategoryException, UserException {
 
-		if (isLoggedIn(authenticationToken) && isAdmin(authenticationToken)) {
+		if (Helper.isLoggedIn(authenticationToken, currentUserSessionRepository)
+				&& Helper.isAdmin(authenticationToken, currentUserSessionRepository)) {
 
 			Category existedCategory = categoryRepository.findByName(category.getName());
 
@@ -44,7 +46,8 @@ public class CategoryServiceImpl implements CategoryService {
 
 	@Override
 	public void updateCategory(Category category, String authenticationToken) throws CategoryException, UserException {
-		if (isLoggedIn(authenticationToken) && isAdmin(authenticationToken)) {
+		if (Helper.isLoggedIn(authenticationToken, currentUserSessionRepository)
+				&& Helper.isAdmin(authenticationToken, currentUserSessionRepository)) {
 
 			Category existedCategory = categoryRepository.findById(category.getId()).get();
 
@@ -64,7 +67,8 @@ public class CategoryServiceImpl implements CategoryService {
 
 	@Override
 	public void deleteCategory(Integer categoryId, String authenticationToken) throws CategoryException, UserException {
-		if (isLoggedIn(authenticationToken) && isAdmin(authenticationToken)) {
+		if (Helper.isLoggedIn(authenticationToken, currentUserSessionRepository)
+				&& Helper.isAdmin(authenticationToken, currentUserSessionRepository)) {
 
 			Category existedCategory = categoryRepository.findById(categoryId).get();
 
@@ -83,7 +87,8 @@ public class CategoryServiceImpl implements CategoryService {
 
 	@Override
 	public List<Category> listAllCategories(String authenticationToken) throws CategoryException, UserException {
-		if (isLoggedIn(authenticationToken) && isAdmin(authenticationToken)) {
+		if (Helper.isLoggedIn(authenticationToken, currentUserSessionRepository)
+				&& Helper.isAdmin(authenticationToken, currentUserSessionRepository)) {
 
 			List<Category> categories = categoryRepository.findAll();
 
@@ -96,33 +101,6 @@ public class CategoryServiceImpl implements CategoryService {
 		} else {
 			throw new UserException("You are not allowed to perform this operation");
 		}
-	}
-
-	@Override
-	public boolean isLoggedIn(String authenticationToken) {
-
-		CurrenUserSession currenUserSession = currentUserSessionRepository
-				.findByAuthenticationToken(authenticationToken);
-
-		if (currenUserSession == null) {
-			return false;
-		}
-
-		return true;
-
-	}
-
-	@Override
-	public boolean isAdmin(String authenticationToken) {
-
-		CurrenUserSession currenUserSession = currentUserSessionRepository
-				.findByAuthenticationToken(authenticationToken);
-
-		if (currenUserSession.getRole().equals("admin")) {
-			return true;
-		}
-
-		return false;
 	}
 
 }

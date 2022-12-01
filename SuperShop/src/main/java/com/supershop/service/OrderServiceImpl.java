@@ -1,20 +1,26 @@
 package com.supershop.service;
 
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.supershop.dto.CartDto;
 import com.supershop.dto.OrderDto;
 import com.supershop.exception.CartException;
 import com.supershop.exception.CurrentUserServiceException;
 import com.supershop.exception.OrderException;
 import com.supershop.exception.UserException;
-import com.supershop.model.CartItem;
-import com.supershop.model.CurrenUserSession;
+import com.supershop.helper.Helper;
+import com.supershop.model.Cart;
 import com.supershop.model.Order;
+import com.supershop.model.OrderItem;
 import com.supershop.model.Payment;
 import com.supershop.model.Product;
 import com.supershop.model.User;
@@ -30,88 +36,101 @@ public class OrderServiceImpl implements OrderService {
 	private UserRepository userRepository;
 
 	@Autowired
+	private CartRepository cartRepository;
+
+	@Autowired
 	private CurrentUserSessionRepository currentUserSessionRepository;
 
+	@Autowired
+	private OrderItemRepository orderItemRepository;
+
+	@Transactional
 	@Override
 	public void makeOrder(OrderDto orderDto, String authenticationToken)
 			throws OrderException, UserException, CurrentUserServiceException, CartException {
 
-		if (!isLoggedIn(authenticationToken)) {
-
+		if (!Helper.isLoggedIn(authenticationToken, currentUserSessionRepository)) {
 			throw new CurrentUserServiceException("login required");
 
 		}
-		// System.out.println("hello");
-		Optional<Order> existedOrder = orderRepository.findById(orderDto.getOrderId());
+		Optional<User> optionalUser = userRepository.findById(orderDto.getUserId());
 
-		if (!existedOrder.isEmpty()) {
-			throw new UserException("Order already exists");
+		if (optionalUser.isEmpty()) {
+			throw new UserException("No users exists with the given id" + orderDto.getUserId());
 		}
 
-		System.out.println("hello");
-		User user = userRepository.findById(orderDto.getUserId()).get();
+		User user = optionalUser.get();
 
-		if (user == null) {
-			throw new UserException("User does not exists with given id :" + orderDto.getUserId());
-		}
+		List<Cart> cart = cartRepository.findByUserOrderByCreateDateTimeDesc(user);
 
-		List<CartItem> cartItems = user.getCart().getCartItems();
-
-		if (cartItems.isEmpty()) {
-			throw new CartException("Unable to process on an empty cart ");
-		}
-
-		Double amount = 0.0;
-
-		for (CartItem cartItem : cartItems) {
-
-			Product product = cartItem.getProduct();
-
-			amount += product.getPrice() * cartItem.getQuantity();
-
-		}
-
-		String paymentStatus = "Pending";
-		if (orderDto.getPaymentMethod().equals("online-payment")) {
-			paymentStatus = "Completed";
+		if (cart.isEmpty()) {
+			throw new CartException("Cannot Process on empty cart");
 		}
 
 		Payment payment = new Payment();
-		payment.setPaymentStatus(paymentStatus);
+
 		payment.setPaymentMethod(orderDto.getPaymentMethod());
-		payment.setAmount(amount);
 
-		Order order = new Order();
-		order.setUser(user);
-		order.setPayment(payment);
-		order.setOrderStatus("pending");
+		String paymentStatus = "pending";
 
-		orderRepository.save(order);
+		payment.setPaymentStatus(paymentStatus);
 
-		System.out.println("Order saved successfully");
+		if (orderDto.getPaymentMethod().equals("online-payment")) {
+			paymentStatus = "success";
+			payment.setPaymentStatus(paymentStatus);
+		}
 
+		Order newOrder = new Order();
+
+		newOrder.setCreateDateTime(LocalDateTime.now());
+		newOrder.setUser(user);
+		newOrder.setOrderStatus("pending");
+		newOrder.setPayment(payment);
+
+		orderRepository.save(newOrder);
+
+		Double totalAmount = 0.0;
+
+		for (Cart c : cart) {
+
+			OrderItem orderItem = new OrderItem();
+
+			orderItem.setCreateDateTime(LocalDateTime.now());
+			orderItem.setOrder(newOrder);
+			orderItem.setProduct(c.getProduct());
+			orderItem.setQuantity(c.getQuantity());
+			orderItem.setTotalPrice(c.getProduct().getPrice() * c.getQuantity());
+
+			totalAmount += c.getQuantity() * c.getProduct().getPrice();
+
+			orderItemRepository.save(orderItem);
+		}
+		payment.setAmount(totalAmount);
+		orderRepository.save(newOrder);
+
+		cartRepository.deleteByUser(user);
 	}
 
 	@Override
 	public List<Order> listOrdersByUserId(Integer userId, String authenticationToken)
 			throws OrderException, UserException, CurrentUserServiceException {
 
-		if (!isLoggedIn(authenticationToken)) {
-
+		if (!Helper.isLoggedIn(authenticationToken, currentUserSessionRepository)) {
 			throw new CurrentUserServiceException("login required");
 
 		}
+		Optional<User> optionalUser = userRepository.findById(userId);
 
-		User user = userRepository.findById(userId).get();
-
-		if (user == null) {
-			throw new UserException("User does not exists with given id :" + userId);
+		if (optionalUser.isEmpty()) {
+			throw new UserException("No users exists with the given id" + userId);
 		}
+
+		User user = optionalUser.get();
 
 		List<Order> orders = user.getOrders();
 
 		if (orders.isEmpty()) {
-			throw new OrderException("No orders available for given user id :" + userId);
+			throw new OrderException("No orders available");
 		}
 
 		return orders;
@@ -120,54 +139,24 @@ public class OrderServiceImpl implements OrderService {
 	@Override
 	public List<Order> listAllOrders(String authenticationToken)
 			throws OrderException, UserException, CurrentUserServiceException {
-		// TODO Auto-generated method stub
 
-		if (!isLoggedIn(authenticationToken)) {
-
+		if (!Helper.isLoggedIn(authenticationToken, currentUserSessionRepository)) {
 			throw new CurrentUserServiceException("login required");
 
 		}
 
-		if (!isAdmin(authenticationToken)) {
-			throw new CurrentUserServiceException("Access denied ");
-		}
-		List<Order> orders = orderRepository.findAll();
+		if (!Helper.isAdmin(authenticationToken, currentUserSessionRepository)) {
+			throw new CurrentUserServiceException("you are not allowed to perform this action");
 
-		if (orders.isEmpty()) {
-			throw new OrderException("No orders exists");
 		}
 
-		return orders;
+		List<Order> allOrders = orderRepository.findAll();
 
-	}
-
-	@Override
-	public boolean isLoggedIn(String authenticationToken) {
-
-		CurrenUserSession currenUserSession = currentUserSessionRepository
-				.findByAuthenticationToken(authenticationToken);
-
-		if (currenUserSession == null) {
-			return false;
+		if (allOrders.isEmpty()) {
+			throw new OrderException("no orders avalilable");
 		}
 
-		return true;
-
-	}
-
-	@Override
-	public boolean isAdmin(String authenticationToken) {
-
-		CurrenUserSession currenUserSession = currentUserSessionRepository
-				.findByAuthenticationToken(authenticationToken);
-		System.out.println(currenUserSession);
-
-		if (currenUserSession.getRole().equals("admin")) {
-
-			return true;
-		}
-
-		return false;
+		return allOrders;
 	}
 
 }

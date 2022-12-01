@@ -7,8 +7,8 @@ import org.springframework.stereotype.Service;
 
 import com.supershop.exception.CurrentUserServiceException;
 import com.supershop.exception.UserException;
-import com.supershop.model.Cart;
-import com.supershop.model.CurrenUserSession;
+import com.supershop.helper.Helper;
+import com.supershop.model.CurrentUserSession;
 import com.supershop.model.User;
 import com.supershop.repository.CartRepository;
 import com.supershop.repository.CurrentUserSessionRepository;
@@ -19,9 +19,6 @@ public class UserServiceImpl implements UserService {
 
 	@Autowired
 	private UserRepository userRepository;
-
-	@Autowired
-	private CartRepository cartRepository;
 
 	@Autowired
 	private CurrentUserSessionRepository currentUserSessionRepository;
@@ -35,10 +32,6 @@ public class UserServiceImpl implements UserService {
 			throw new UserException("User already exists with given email :" + user.getEmail());
 		}
 
-		Cart cart = new Cart();
-
-		cartRepository.save(cart);
-		user.setCart(cart);
 		userRepository.save(user);
 
 		System.out.println("User Saved Successfully");
@@ -48,11 +41,11 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public List<User> listAllUsers(String authenticationToken) throws UserException, CurrentUserServiceException {
 
-		if (!isLoggedIn(authenticationToken)) {
+		if (!Helper.isLoggedIn(authenticationToken, currentUserSessionRepository)) {
 			throw new CurrentUserServiceException("login required");
 		}
 
-		if (!isAdmin(authenticationToken)) {
+		if (!Helper.isAdmin(authenticationToken, currentUserSessionRepository)) {
 			throw new UserException("You are not allowed to perform this action");
 		}
 
@@ -69,11 +62,11 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public void updateUser(User user, String authenticationToken) throws UserException, CurrentUserServiceException {
 
-		if (!isLoggedIn(authenticationToken)) {
+		if (!Helper.isLoggedIn(authenticationToken, currentUserSessionRepository)) {
 			throw new CurrentUserServiceException("Login required");
 		}
 
-		if (isAdmin(authenticationToken)) {
+		if (Helper.isAdmin(authenticationToken, currentUserSessionRepository)) {
 
 			User existedUser = userRepository.findByEmail(user.getEmail());
 
@@ -86,9 +79,9 @@ public class UserServiceImpl implements UserService {
 			System.out.println("User updated by admin successfully");
 		} else {
 
-			CurrenUserSession currenUserSession = currentUserSessionRepository.findByEmail(user.getEmail());
+			CurrentUserSession currentUserSession = currentUserSessionRepository.findByEmail(user.getEmail());
 
-			if (!currenUserSession.getAuthenticationToken().equals(authenticationToken)) {
+			if (!currentUserSession.getAuthenticationToken().equals(authenticationToken)) {
 				throw new CurrentUserServiceException("Chaeck user email id");
 			}
 
@@ -100,11 +93,12 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public void deleteUser(String email, String authenticationToken) throws UserException, CurrentUserServiceException {
-		if (!isLoggedIn(authenticationToken)) {
+
+		if (!Helper.isLoggedIn(authenticationToken, currentUserSessionRepository)) {
 			throw new CurrentUserServiceException("Login required");
 		}
 
-		if (isAdmin(authenticationToken)) {
+		if (Helper.isAdmin(authenticationToken, currentUserSessionRepository)) {
 
 			User existedUser = userRepository.findByEmail(email);
 
@@ -113,48 +107,25 @@ public class UserServiceImpl implements UserService {
 			}
 
 			userRepository.delete(existedUser);
+			CurrentUserSession currentUserSession = currentUserSessionRepository.findByEmail(email);
+
+			currentUserSessionRepository.delete(currentUserSession);
 
 			System.out.println("User deletd by admin successfully");
 		} else {
 
-			CurrenUserSession currenUserSession = currentUserSessionRepository.findByEmail(email);
+			CurrentUserSession currentUserSession = currentUserSessionRepository.findByEmail(email);
 
-			if (!currenUserSession.getAuthenticationToken().equals(authenticationToken)) {
+			if (!currentUserSession.getAuthenticationToken().equals(authenticationToken)) {
 				throw new CurrentUserServiceException("Chaeck user email id");
 			}
 
-			currentUserSessionRepository.delete(currenUserSession);
 			userRepository.delete(userRepository.findByEmail(email));
 
+			currentUserSessionRepository.delete(currentUserSession);
+
 		}
 
-	}
-
-	@Override
-	public boolean isLoggedIn(String authenticationToken) {
-
-		CurrenUserSession currenUserSession = currentUserSessionRepository
-				.findByAuthenticationToken(authenticationToken);
-
-		if (currenUserSession == null) {
-			return false;
-		}
-
-		return true;
-
-	}
-
-	@Override
-	public boolean isAdmin(String authenticationToken) throws CurrentUserServiceException {
-
-		CurrenUserSession currenUserSession = currentUserSessionRepository
-				.findByAuthenticationToken(authenticationToken);
-
-		if (currenUserSession.getRole().equals("admin")) {
-			return true;
-		}
-
-		return false;
 	}
 
 }
