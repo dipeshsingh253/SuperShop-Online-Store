@@ -1,6 +1,7 @@
 import React from "react";
 import { useState } from "react";
 import UserService from "../services/UserService";
+import swal from "sweetalert";
 
 const LoginFrom = () => {
   const [userDto, setUserDto] = useState({
@@ -23,9 +24,16 @@ const LoginFrom = () => {
     UserService.loginUser(userDto)
       .then((res) => {
         console.log(res);
+        swal({
+          title: res.data,
+          icon: "success",
+        });
       })
-      .catch((err) => {
-        console.log(err);
+      .catch((error) => {
+        swal({
+          title: error.response.data.message,
+          icon: "error",
+        });
       });
   };
 

@@ -1,6 +1,7 @@
 import React from "react";
 import { useState } from "react";
 import UserService from "../services/UserService";
+import swal from "sweetalert";
 
 export const RegistrationFrom = () => {
   const [user, setUser] = useState({
@@ -43,10 +44,16 @@ export const RegistrationFrom = () => {
 
     UserService.saveUser(user)
       .then((res) => {
-        console.log(res);
+        swal({
+          title: res.data,
+          icon: "success",
+        });
       })
       .catch((error) => {
-        console.log(e);
+        swal({
+          title: error.response.data.message,
+          icon: "error",
+        });
       });
 
     console.log(user);
