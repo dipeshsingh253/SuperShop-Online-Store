@@ -2,6 +2,7 @@ import React from "react";
 import { useState } from "react";
 import UserService from "../services/UserService";
 import swal from "sweetalert";
+import { useNavigate } from "react-router-dom";
 
 export const RegistrationFrom = () => {
   const [user, setUser] = useState({
@@ -21,6 +22,8 @@ export const RegistrationFrom = () => {
     password: "",
     role: "customer",
   });
+
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     const value = e.target.value;
@@ -48,6 +51,8 @@ export const RegistrationFrom = () => {
           title: res.data,
           icon: "success",
         });
+
+        navigate("/login");
       })
       .catch((error) => {
         swal({

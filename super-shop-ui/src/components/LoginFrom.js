@@ -2,13 +2,17 @@ import React from "react";
 import { useState } from "react";
 import UserService from "../services/UserService";
 import swal from "sweetalert";
+import { useNavigate } from "react-router-dom";
 
 const LoginFrom = () => {
   const [userDto, setUserDto] = useState({
     email: "",
     password: "",
-    role: "admin",
   });
+
+  const [role, setRole] = useState("admin");
+
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     const value = e.target.value;
@@ -20,16 +24,32 @@ const LoginFrom = () => {
 
   const loginUser = (e) => {
     e.preventDefault();
+
     console.log(userDto);
     UserService.loginUser(userDto)
       .then((res) => {
-        console.log(res);
+        // console.log(res);
         swal({
-          title: res.data,
+          title: res.data.message,
           icon: "success",
         });
+//figure out why usestate is not working
+        const token = res.data.authenticationToken;
+
+        localStorage.setItem("token", token);
+
+        localStorage.setItem("isLoggedIn", true);
+
+        localStorage.setItem("role", "admin");
+
+        if (role == "admin") {
+          navigate("/dashboard");
+        } else {
+          navigate("/home");
+        }
       })
       .catch((error) => {
+        console.log(error);
         swal({
           title: error.response.data.message,
           icon: "error",
