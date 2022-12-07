@@ -19,7 +19,8 @@ import com.supershop.exception.ProductException;
 import com.supershop.exception.UserException;
 import com.supershop.model.Product;
 import com.supershop.service.ProductService;
-
+import org.springframework.web.bind.annotation.CrossOrigin;
+@CrossOrigin("http://localhost:3000/")
 @RestController
 public class ProductController {
 

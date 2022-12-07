@@ -6,7 +6,7 @@ import com.supershop.exception.UserException;
 
 public interface CurrentUserSessionService {
 
-	public void loginUser(UserDto userDto) throws UserException, CurrentUserServiceException;
+	public String loginUser(UserDto userDto) throws UserException, CurrentUserServiceException;
 
 	public void logoutUser(String authenticationToken) throws UserException, CurrentUserServiceException;
 

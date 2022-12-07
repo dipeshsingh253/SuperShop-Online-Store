@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.supershop.dto.MyResponse;
 import com.supershop.dto.UserDto;
 import com.supershop.exception.CurrentUserServiceException;
 import com.supershop.exception.UserException;
@@ -20,6 +22,7 @@ import com.supershop.model.User;
 import com.supershop.service.CurrentUserSessionService;
 import com.supershop.service.UserService;
 
+@CrossOrigin("http://localhost:3000/")
 @RestController
 public class UserSessionController {
 
@@ -30,12 +33,14 @@ public class UserSessionController {
 	private UserService userService;
 
 	@PostMapping("/login")
-	public ResponseEntity<String> loginUser(@RequestBody UserDto userDto)
+	public ResponseEntity<MyResponse> loginUser(@RequestBody UserDto userDto)
 			throws UserException, CurrentUserServiceException {
 
-		currentUserSessionService.loginUser(userDto);
+		String token = currentUserSessionService.loginUser(userDto);
 
-		return new ResponseEntity<String>("User Logged in", HttpStatus.ACCEPTED);
+		MyResponse response = new MyResponse("User Logged in", token);
+
+		return new ResponseEntity<MyResponse>(response, HttpStatus.ACCEPTED);
 
 	}
 

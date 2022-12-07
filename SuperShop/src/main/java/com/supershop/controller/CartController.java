@@ -22,7 +22,8 @@ import com.supershop.exception.ProductException;
 import com.supershop.exception.UserException;
 import com.supershop.model.Cart;
 import com.supershop.service.CartService;
-
+import org.springframework.web.bind.annotation.CrossOrigin;
+@CrossOrigin("http://localhost:3000/")
 @RestController
 public class CartController {
 

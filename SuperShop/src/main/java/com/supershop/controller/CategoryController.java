@@ -13,12 +13,13 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.CrossOrigin;
 
 import com.supershop.exception.CategoryException;
 import com.supershop.exception.UserException;
 import com.supershop.model.Category;
 import com.supershop.service.CategoryService;
-
+@CrossOrigin("http://localhost:3000/")
 @RestController
 public class CategoryController {
 

@@ -20,7 +20,8 @@ import com.supershop.exception.OrderException;
 import com.supershop.exception.UserException;
 import com.supershop.model.Order;
 import com.supershop.service.OrderService;
-
+import org.springframework.web.bind.annotation.CrossOrigin;
+@CrossOrigin("http://localhost:3000/")
 @RestController
 public class OrderController {
 

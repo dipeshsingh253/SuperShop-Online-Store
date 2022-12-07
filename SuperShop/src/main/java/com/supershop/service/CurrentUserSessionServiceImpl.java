@@ -25,12 +25,18 @@ public class CurrentUserSessionServiceImpl implements CurrentUserSessionService 
 	private UserRepository userRepository;
 
 	@Override
-	public void loginUser(UserDto userDto) throws UserException, CurrentUserServiceException {
+	public String loginUser(UserDto userDto) throws UserException, CurrentUserServiceException {
 
 		User user = userRepository.findByEmail(userDto.getEmail());
 
 		if (user == null) {
-			throw new UserException("User does not exists with given email :" + userDto.getEmail());
+			throw new UserException("User does not exists with given email ");
+		}
+
+		if (!user.getPassword().equals(userDto.getPassword())) {
+			System.out.println(user.getPassword() + userDto.getPassword());
+
+			throw new UserException("Enter valid email or password");
 		}
 
 		CurrentUserSession currenUserSession = currentUserSessionRepository.findByEmail(userDto.getEmail());
@@ -42,9 +48,13 @@ public class CurrentUserSessionServiceImpl implements CurrentUserSessionService 
 		CurrentUserSession newUserSession = new CurrentUserSession(user.getId(), LocalDateTime.now(),
 				RandomString.make(12), user.getRole(), user.getEmail());
 
+		String token = newUserSession.getAuthenticationToken();
+
 		currentUserSessionRepository.save(newUserSession);
 
 		System.out.println("Session Started successfully");
+
+		return token;
 
 	}
 
