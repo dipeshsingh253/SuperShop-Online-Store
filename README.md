@@ -10,7 +10,7 @@ SuperShop Online Store is an Online E-commerce application. SuperShop is a moder
 
 
 
-
+Note : UI is under progress
 ## Features
 
 ### Customer
