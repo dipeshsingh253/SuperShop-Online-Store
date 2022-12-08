@@ -8,6 +8,7 @@ import AddProduct from "./components/admin/Product/AddProduct";
 import AllProduct from "./components/admin/Product/AllProducts";
 import EditProduct from "./components/admin/Product/EditProduct";
 import AllCategory from "./components/admin/Category/AllCategory";
+import EditCategory from "./components/admin/Category/EditCategory";
 
 const router = createBrowserRouter([
   {
@@ -45,6 +46,10 @@ const router = createBrowserRouter([
   {
     path: "/allcategory",
     element: <AllCategory />,
+  },
+  {
+    path: "/editcategory",
+    element: <EditCategory />,
   },
 ]);
 
