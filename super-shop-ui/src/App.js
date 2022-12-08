@@ -3,10 +3,11 @@ import RegistrationForm from "./components/RegistrationFrom";
 import LoginFrom from "./components/LoginFrom";
 import Home from "./components/Home";
 import Dashboard from "./components/admin/Dashboard";
-import AddCategory from "./components/admin/AddCategory";
-import AddProduct from "./components/admin/AddProduct";
-import AllProduct from "./components/admin/AllProducts";
-import EditProduct from "./components/admin/EditProduct";
+import AddCategory from "./components/admin/Category/AddCategory";
+import AddProduct from "./components/admin/Product/AddProduct";
+import AllProduct from "./components/admin/Product/AllProducts";
+import EditProduct from "./components/admin/Product/EditProduct";
+import AllCategory from "./components/admin/Category/AllCategory";
 
 const router = createBrowserRouter([
   {
@@ -40,6 +41,10 @@ const router = createBrowserRouter([
   {
     path: "/editproduct",
     element: <EditProduct />,
+  },
+  {
+    path: "/allcategory",
+    element: <AllCategory />,
   },
 ]);
 

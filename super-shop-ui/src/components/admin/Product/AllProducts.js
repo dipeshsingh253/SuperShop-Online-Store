@@ -1,13 +1,14 @@
 import React from "react";
-import Product from "../Product";
+import Product from "../../Product";
 import { useState } from "react";
-import ProductService from "../../services/ProductService";
+import ProductService from "../../../services/ProductService";
 import { useEffect } from "react";
 
 const AllProducts = () => {
   const [productData, setproductData] = useState(null);
   const [loading, setloading] = useState(true);
 
+  
   useEffect(() => {
     const fetchData = async () => {
       setloading(true);
@@ -27,7 +28,7 @@ const AllProducts = () => {
   }, []);
 
   return (
-    <div>
+    <div className="grid md:gap-5 md:grid-cols-3 sm:grid sm:gap-4 sm:grid-cols-2 justify-center bg-red-200 p-5">
       {!loading &&
         productData.map((pro) => (
           <Product

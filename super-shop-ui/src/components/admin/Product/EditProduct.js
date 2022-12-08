@@ -1,8 +1,9 @@
 import React from "react";
 import { useState } from "react";
+import CategoryService from "../../../services/CategoryService";
 import swal from "sweetalert";
-import ProductService from "../../services/ProductService";
-const AddProduct = () => {
+import ProductService from "../../../services/ProductService";
+const EditProduct = () => {
   const [product, setProduct] = useState({
     category: {
       id: 0,
@@ -37,10 +38,10 @@ const AddProduct = () => {
     });
   };
 
-  const saveProduct = (e) => {
+  const editProduct = (e) => {
     e.preventDefault();
 
-    ProductService.saveProduct(product)
+    ProductService.updateProduct(product)
       .then((res) => {
         console.log(res);
         swal({
@@ -49,6 +50,7 @@ const AddProduct = () => {
         });
       })
       .catch((error) => {
+        console.log(error);
         swal({
           title: error.response.data.message,
           icon: "error",
@@ -60,7 +62,7 @@ const AddProduct = () => {
     <div className="flex rounded justify-center items-center w-3/4 mx-auto my-8">
       <div className="px-8 py-8">
         <div className="font-bold text-2xl tracking-wider">
-          <h1>Add Product</h1>
+          <h1>Edit Product</h1>
         </div>
 
         {/* Input Fields */}
@@ -152,10 +154,10 @@ const AddProduct = () => {
 
         <div className="items-center justify-center h-14 w-full my-4 space-x-4 pt-4">
           <button
-            onClick={saveProduct}
+            onClick={editProduct}
             className="rounded text-white bg-green-500 hover:bg-green-700 px-6 py-2"
           >
-            Add Product
+            Update Product
           </button>
         </div>
       </div>
@@ -163,4 +165,4 @@ const AddProduct = () => {
   );
 };
 
-export default AddProduct;
+export default EditProduct;

@@ -11,5 +11,9 @@ class CategoryService {
       category
     );
   }
+
+  getAllCategories() {
+    return axios.get(`http://localhost:8088/categories?token=${TOKEN}`);
+  }
 }
 export default new CategoryService();
