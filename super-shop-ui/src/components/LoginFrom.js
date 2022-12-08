@@ -1,5 +1,5 @@
 import React from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import UserService from "../services/UserService";
 import swal from "sweetalert";
 import { useNavigate } from "react-router-dom";
@@ -11,6 +11,7 @@ const LoginFrom = () => {
   });
 
   const [role, setRole] = useState("admin");
+  const [isloggedIn, setIsloggedIn] = useState(false);
 
   const navigate = useNavigate();
 
@@ -25,20 +26,17 @@ const LoginFrom = () => {
   const loginUser = (e) => {
     e.preventDefault();
 
-    console.log(userDto);
     UserService.loginUser(userDto)
       .then((res) => {
-        // console.log(res);
         swal({
           title: res.data.message,
           icon: "success",
         });
-//figure out why usestate is not working
         const token = res.data.authenticationToken;
-
+        setIsloggedIn(true);
         localStorage.setItem("token", token);
 
-        localStorage.setItem("isLoggedIn", true);
+        localStorage.setItem("isLoggedIn", isloggedIn);
 
         localStorage.setItem("role", "admin");
 
@@ -49,7 +47,6 @@ const LoginFrom = () => {
         }
       })
       .catch((error) => {
-        console.log(error);
         swal({
           title: error.response.data.message,
           icon: "error",

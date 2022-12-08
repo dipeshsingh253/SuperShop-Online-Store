@@ -1,6 +1,5 @@
 import React from "react";
 import { useState } from "react";
-import CategoryService from "../../services/CategoryService";
 import swal from "sweetalert";
 import ProductService from "../../services/ProductService";
 const AddProduct = () => {
@@ -44,9 +43,16 @@ const AddProduct = () => {
     ProductService.saveProduct(product)
       .then((res) => {
         console.log(res);
+        swal({
+          title: res.data,
+          icon: "success",
+        });
       })
       .catch((error) => {
-        console.log(error);
+        swal({
+          title: error.response.data.message,
+          icon: "error",
+        });
       });
   };
 

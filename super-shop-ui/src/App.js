@@ -5,6 +5,8 @@ import Home from "./components/Home";
 import Dashboard from "./components/admin/Dashboard";
 import AddCategory from "./components/admin/AddCategory";
 import AddProduct from "./components/admin/AddProduct";
+import AllProduct from "./components/admin/AllProducts";
+import EditProduct from "./components/admin/EditProduct";
 
 const router = createBrowserRouter([
   {
@@ -30,6 +32,14 @@ const router = createBrowserRouter([
   {
     path: "/addproduct",
     element: <AddProduct />,
+  },
+  {
+    path: "/allproduct",
+    element: <AllProduct />,
+  },
+  {
+    path: "/editproduct",
+    element: <EditProduct />,
   },
 ]);
 
