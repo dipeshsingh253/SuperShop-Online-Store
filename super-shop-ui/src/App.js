@@ -10,6 +10,8 @@ import EditProduct from "./components/admin/Product/EditProduct";
 import AllCategory from "./components/admin/Category/AllCategory";
 import EditCategory from "./components/admin/Category/EditCategory";
 import ProductPage from "./components/ProductPage";
+import CartPage from "./components/CartPage";
+import OrderDetail from "./components/OrderDetail";
 
 const router = createBrowserRouter([
   {
@@ -59,6 +61,14 @@ const router = createBrowserRouter([
   {
     path: "/productpage/:id",
     element: <ProductPage />,
+  },
+  {
+    path: "/cart",
+    element: <CartPage />,
+  },
+  {
+    path: "/orders",
+    element: <OrderDetail />,
   },
 ]);
 

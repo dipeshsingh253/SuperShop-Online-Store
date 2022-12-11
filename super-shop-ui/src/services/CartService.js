@@ -10,6 +10,12 @@ class CartService {
       cartDto
     );
   }
+
+  getCartByUser() {
+    return axios.get(
+      `http://localhost:8088/carts/user?authenticationToken=${TOKEN}`
+    );
+  }
 }
 
 export default new CartService();

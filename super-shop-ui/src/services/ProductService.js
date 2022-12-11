@@ -8,7 +8,7 @@ class ProductService {
   }
 
   getAllProducts() {
-    return axios.get(`http://localhost:8088/products?token=${TOKEN}`);
+    return axios.get(`http://localhost:8088/products`);
   }
 
   updateProduct(product) {
@@ -16,7 +16,7 @@ class ProductService {
   }
 
   getProductById(id) {
-    return axios.get(`http://localhost:8088/products/${id}?token=${TOKEN}`);
+    return axios.get(`http://localhost:8088/products/${id}`);
   }
 }
 
