@@ -9,6 +9,7 @@ import AllProduct from "./components/admin/Product/AllProducts";
 import EditProduct from "./components/admin/Product/EditProduct";
 import AllCategory from "./components/admin/Category/AllCategory";
 import EditCategory from "./components/admin/Category/EditCategory";
+import ProductPage from "./components/ProductPage";
 
 const router = createBrowserRouter([
   {
@@ -54,6 +55,10 @@ const router = createBrowserRouter([
   {
     path: "/editcategory",
     element: <EditCategory />,
+  },
+  {
+    path: "/productpage/:id",
+    element: <ProductPage />,
   },
 ]);
 

@@ -15,7 +15,9 @@ class ProductService {
     return axios.put(`http://localhost:8088/products?token=${TOKEN}`, product);
   }
 
-
+  getProductById(id) {
+    return axios.get(`http://localhost:8088/products/${id}?token=${TOKEN}`);
+  }
 }
 
 export default new ProductService();

@@ -1,21 +1,8 @@
 import React, { useEffect } from "react";
 import ProductService from "../services/ProductService";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 const ProductList = () => {
-  const products = [
-    {
-      id: 1,
-      name: "Basic Tee",
-      href: "#",
-      imageSrc:
-        "https://tailwindui.com/img/ecommerce-images/product-page-01-related-product-01.jpg",
-      imageAlt: "Front of men's Basic Tee in black.",
-      price: "$35",
-      color: "Black",
-    },
-    // More products...
-  ];
-
   const [productData, setproductData] = useState(null);
   const [loading, setloading] = useState(true);
 
@@ -34,6 +21,14 @@ const ProductList = () => {
 
     fetchData();
   }, []);
+
+  const navigate = useNavigate();
+
+  const showProduct = (e, id) => {
+    e.preventDefault();
+
+    navigate(`/productpage/${id}`);
+  };
 
   return (
     <div className="bg-white">
@@ -55,7 +50,7 @@ const ProductList = () => {
                 <div className="mt-4 flex justify-between">
                   <div>
                     <h3 className="text-sm text-gray-700">
-                      <a href={product.imageUrl}>
+                      <a onClick={(e, id) => showProduct(e, product.id)}>
                         <span aria-hidden="true" className="absolute inset-0" />
                         {product.name}
                       </a>
