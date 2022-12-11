@@ -19,6 +19,7 @@ import com.supershop.exception.OrderException;
 import com.supershop.exception.UserException;
 import com.supershop.helper.Helper;
 import com.supershop.model.Cart;
+import com.supershop.model.CurrentUserSession;
 import com.supershop.model.Order;
 import com.supershop.model.OrderItem;
 import com.supershop.model.Payment;
@@ -53,7 +54,13 @@ public class OrderServiceImpl implements OrderService {
 			throw new CurrentUserServiceException("login required");
 
 		}
-		Optional<User> optionalUser = userRepository.findById(orderDto.getUserId());
+		/// this way a customer can only book products for their self just like real
+		/// worlds and admins are also not allowed to make orders for anyone else except
+		/// themselves
+
+		CurrentUserSession session = currentUserSessionRepository.findByAuthenticationToken(authenticationToken);
+
+		Optional<User> optionalUser = userRepository.findById(session.getUserId());
 
 		if (optionalUser.isEmpty()) {
 			throw new UserException("No users exists with the given id" + orderDto.getUserId());
@@ -119,7 +126,13 @@ public class OrderServiceImpl implements OrderService {
 			throw new CurrentUserServiceException("login required");
 
 		}
-		Optional<User> optionalUser = userRepository.findById(userId);
+		Optional<User> optionalUser;
+		if (!Helper.isAdmin(authenticationToken, currentUserSessionRepository)) {
+			CurrentUserSession session = currentUserSessionRepository.findByAuthenticationToken(authenticationToken);
+			optionalUser = userRepository.findById(session.getUserId());
+		} else {
+			optionalUser = userRepository.findById(userId);
+		}
 
 		if (optionalUser.isEmpty()) {
 			throw new UserException("No users exists with the given id" + userId);

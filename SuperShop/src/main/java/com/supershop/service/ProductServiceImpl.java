@@ -80,20 +80,20 @@ public class ProductServiceImpl implements ProductService {
 	}
 
 	@Override
-	public List<Product> listAllPrdoucts(String authenticationToken) throws ProductException, UserException {
-		if (Helper.isLoggedIn(authenticationToken, currentUserSessionRepository)) {
+	public List<Product> listAllPrdoucts() throws ProductException, UserException {
+		// if (Helper.isLoggedIn(authenticationToken, currentUserSessionRepository)) {
 
-			List<Product> products = productRepository.findAll();
+		List<Product> products = productRepository.findAll();
 
-			if (products.isEmpty()) {
-				throw new ProductException("No products Available");
-			}
-
-			return products;
-
-		} else {
-			throw new UserException("You don't have access to perform this operation or log in as an admin");
+		if (products.isEmpty()) {
+			throw new ProductException("No products Available");
 		}
+
+		return products;
+
+//		} else {
+//			throw new UserException("You don't have access to perform this operation or log in as an admin");
+//		}
 	}
 
 	@Override
@@ -115,21 +115,21 @@ public class ProductServiceImpl implements ProductService {
 	}
 
 	@Override
-	public Product getProductById(Integer id, String token) throws UserException, ProductException {
+	public Product getProductById(Integer id) throws UserException, ProductException {
 
-		if (Helper.isLoggedIn(token, currentUserSessionRepository)) {
+		// if (Helper.isLoggedIn(token, currentUserSessionRepository)) {
 
-			Product existedProduct = productRepository.findById(id).get();
+		Product existedProduct = productRepository.findById(id).get();
 
-			if (existedProduct == null) {
-				throw new ProductException("Product does not exist");
-			}
-
-			return existedProduct;
-
-		} else {
-			throw new UserException("You don't have access to perform this operation or log in as an admin");
+		if (existedProduct == null) {
+			throw new ProductException("Product does not exist");
 		}
+
+		return existedProduct;
+
+//		} else {
+//			throw new UserException("You don't have access to perform this operation or log in as an admin");
+//		}
 
 	}
 

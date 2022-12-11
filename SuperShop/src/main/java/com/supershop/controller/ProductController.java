@@ -49,10 +49,10 @@ public class ProductController {
 	}
 
 	@GetMapping("/products")
-	public ResponseEntity<List<Product>> listAllProducts(@RequestParam String token)
+	public ResponseEntity<List<Product>> listAllProducts()
 			throws UserException, ProductException {
 
-		List<Product> products = productService.listAllPrdoucts(token);
+		List<Product> products = productService.listAllPrdoucts();
 
 		return new ResponseEntity<List<Product>>(products, HttpStatus.OK);
 
@@ -69,10 +69,10 @@ public class ProductController {
 	}
 
 	@GetMapping("/products/{id}")
-	public ResponseEntity<Product> getProductById(@PathVariable("id") Integer id, @RequestParam String token)
+	public ResponseEntity<Product> getProductById(@PathVariable("id") Integer id)
 			throws UserException, ProductException {
 
-		Product product = productService.getProductById(id, token);
+		Product product = productService.getProductById(id);
 
 		return new ResponseEntity<Product>(product, HttpStatus.OK);
 

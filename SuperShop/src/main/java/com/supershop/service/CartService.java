@@ -20,7 +20,7 @@ public interface CartService {
 
 	public void removeCartItem(CartItemDto cartDto, String authenticationToken) throws CartException, CurrentUserServiceException, UserException, ProductException;
 
-	public CartDto getCartByUserId(Integer userId, String authenticationToken) throws CartException, UserException, CurrentUserServiceException;
+	public CartDto getCartByUser(String authenticationToken) throws CartException, UserException, CurrentUserServiceException;
 
 	public void updateCartItem(CartItemDto cartDto, String authenticationToken) throws CartException, CurrentUserServiceException, UserException, ProductException;
 

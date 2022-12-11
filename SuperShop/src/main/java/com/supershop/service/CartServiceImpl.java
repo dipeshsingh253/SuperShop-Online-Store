@@ -128,7 +128,7 @@ public class CartServiceImpl implements CartService {
 	}
 
 	@Override
-	public CartDto getCartByUserId(Integer userId, String authenticationToken)
+	public CartDto getCartByUser(String authenticationToken)
 			throws CartException, UserException, CurrentUserServiceException {
 
 		if (!Helper.isLoggedIn(authenticationToken, currentUserSessionRepository)) {
@@ -137,10 +137,12 @@ public class CartServiceImpl implements CartService {
 
 		}
 
-		Optional<User> optionalUser = userRepository.findById(userId);
+		CurrentUserSession session = currentUserSessionRepository.findByAuthenticationToken(authenticationToken);
+
+		Optional<User> optionalUser = userRepository.findById(session.getUserId());
 
 		if (optionalUser.isEmpty()) {
-			throw new UserException("No users exists with the given id" + userId);
+			throw new UserException("No users exists with the given id" + session.getUserId());
 		}
 
 		User user = optionalUser.get();
@@ -167,6 +169,7 @@ public class CartServiceImpl implements CartService {
 			System.out.println(c);
 
 			CartItemDto cartItemDto = new CartItemDto();
+			cartItemDto.setId(c.getId());
 			cartItemDto.setUserId(c.getUser().getId());
 			cartItemDto.setQantity(c.getQuantity());
 			cartItemDto.setProductDto(pDto);
@@ -176,7 +179,7 @@ public class CartServiceImpl implements CartService {
 			totalAmount += cartItemDto.getTotal();
 
 		}
-		cartDto.setUserId(userId);
+		cartDto.setUserId(session.getUserId());
 
 		cartDto.setCartItems(cartItems);
 		cartDto.setTotalCost(totalAmount);

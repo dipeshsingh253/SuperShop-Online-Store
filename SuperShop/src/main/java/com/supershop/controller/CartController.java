@@ -24,6 +24,7 @@ import com.supershop.exception.UserException;
 import com.supershop.model.Cart;
 import com.supershop.service.CartService;
 import org.springframework.web.bind.annotation.CrossOrigin;
+
 @CrossOrigin("http://localhost:3000/")
 @RestController
 public class CartController {
@@ -52,11 +53,11 @@ public class CartController {
 		return new ResponseEntity<String>("Item updated to cart", HttpStatus.ACCEPTED);
 	}
 
-	@GetMapping("/carts/user/{id}")
-	public ResponseEntity<CartDto> getCartByUserId(@PathVariable("id") Integer userId,
-			@RequestParam String authenticationToken) throws CartException, UserException, CurrentUserServiceException {
+	@GetMapping("/carts/user")
+	public ResponseEntity<CartDto> getCartByUserId(@RequestParam String authenticationToken)
+			throws CartException, UserException, CurrentUserServiceException {
 
-		CartDto userCart = cartService.getCartByUserId(userId, authenticationToken);
+		CartDto userCart = cartService.getCartByUser(authenticationToken);
 
 		return new ResponseEntity<CartDto>(userCart, HttpStatus.OK);
 

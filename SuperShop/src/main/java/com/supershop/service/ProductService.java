@@ -15,10 +15,10 @@ public interface ProductService {
 	public void updateProduct(Product product, String authenticationToken)
 			throws UserException, ProductException, CategoryException;
 
-	public List<Product> listAllPrdoucts(String authenticationToken) throws UserException, ProductException;
+	public List<Product> listAllPrdoucts() throws UserException, ProductException;
 
 	public void deleteProduct(Integer productId, String authenticationToken) throws UserException, ProductException;
 
-	public Product getProductById(Integer id, String token) throws UserException, ProductException;
+	public Product getProductById(Integer id) throws UserException, ProductException;
 
 }
