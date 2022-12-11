@@ -2,6 +2,7 @@ package com.supershop.service;
 
 import java.util.List;
 
+import com.supershop.dto.AddItemToCartDto;
 import com.supershop.dto.CartDto;
 import com.supershop.dto.CartItemDto;
 import com.supershop.exception.CartException;
@@ -12,7 +13,7 @@ import com.supershop.model.Cart;
 
 public interface CartService {
 
-	public void addItemToCart(CartItemDto cartDto, String authenticationToken)
+	public void addItemToCart(AddItemToCartDto cartDto, String authenticationToken)
 			throws CartException, CurrentUserServiceException, UserException, ProductException;
 
 //	public void updateCart(Cart cart, String authenticationToken) throws CartException, CurrentUserServiceException;

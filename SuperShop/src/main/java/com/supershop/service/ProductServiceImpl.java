@@ -81,8 +81,7 @@ public class ProductServiceImpl implements ProductService {
 
 	@Override
 	public List<Product> listAllPrdoucts(String authenticationToken) throws ProductException, UserException {
-		if (Helper.isLoggedIn(authenticationToken, currentUserSessionRepository)
-				&& Helper.isAdmin(authenticationToken, currentUserSessionRepository)) {
+		if (Helper.isLoggedIn(authenticationToken, currentUserSessionRepository)) {
 
 			List<Product> products = productRepository.findAll();
 
@@ -113,6 +112,25 @@ public class ProductServiceImpl implements ProductService {
 		} else {
 			throw new UserException("You don't have access to perform this operation or log in as an admin");
 		}
+	}
+
+	@Override
+	public Product getProductById(Integer id, String token) throws UserException, ProductException {
+
+		if (Helper.isLoggedIn(token, currentUserSessionRepository)) {
+
+			Product existedProduct = productRepository.findById(id).get();
+
+			if (existedProduct == null) {
+				throw new ProductException("Product does not exist");
+			}
+
+			return existedProduct;
+
+		} else {
+			throw new UserException("You don't have access to perform this operation or log in as an admin");
+		}
+
 	}
 
 }

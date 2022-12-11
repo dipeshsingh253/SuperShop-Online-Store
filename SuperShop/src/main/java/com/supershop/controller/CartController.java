@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.supershop.dto.AddItemToCartDto;
 import com.supershop.dto.CartDto;
 import com.supershop.dto.CartItemDto;
 import com.supershop.exception.CartException;
@@ -32,7 +33,7 @@ public class CartController {
 
 	@PostMapping("/additemtocart")
 	public ResponseEntity<String> addItemToCart(@RequestParam String authenticationToken,
-			@RequestBody CartItemDto cartDto)
+			@RequestBody AddItemToCartDto cartDto)
 			throws CartException, CurrentUserServiceException, UserException, ProductException {
 
 		cartService.addItemToCart(cartDto, authenticationToken);

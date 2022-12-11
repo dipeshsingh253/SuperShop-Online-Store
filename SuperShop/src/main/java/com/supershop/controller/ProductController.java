@@ -20,6 +20,7 @@ import com.supershop.exception.UserException;
 import com.supershop.model.Product;
 import com.supershop.service.ProductService;
 import org.springframework.web.bind.annotation.CrossOrigin;
+
 @CrossOrigin("http://localhost:3000/")
 @RestController
 public class ProductController {
@@ -64,6 +65,16 @@ public class ProductController {
 		productService.deleteProduct(id, token);
 
 		return new ResponseEntity<String>("Product deleted", HttpStatus.OK);
+
+	}
+
+	@GetMapping("/products/{id}")
+	public ResponseEntity<Product> getProductById(@PathVariable("id") Integer id, @RequestParam String token)
+			throws UserException, ProductException {
+
+		Product product = productService.getProductById(id, token);
+
+		return new ResponseEntity<Product>(product, HttpStatus.OK);
 
 	}
 

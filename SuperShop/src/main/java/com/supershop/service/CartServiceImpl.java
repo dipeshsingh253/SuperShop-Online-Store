@@ -9,6 +9,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.supershop.dto.AddItemToCartDto;
 import com.supershop.dto.CartDto;
 import com.supershop.dto.CartItemDto;
 import com.supershop.dto.ProductDto;
@@ -42,7 +43,7 @@ public class CartServiceImpl implements CartService {
 	private ProductRepository productRepository;
 
 	@Override
-	public void addItemToCart(CartItemDto cartDto, String authenticationToken)
+	public void addItemToCart(AddItemToCartDto cartDto, String authenticationToken)
 			throws CartException, CurrentUserServiceException, UserException, ProductException {
 
 		if (!Helper.isLoggedIn(authenticationToken, currentUserSessionRepository)) {
@@ -53,15 +54,17 @@ public class CartServiceImpl implements CartService {
 
 		}
 
-		Optional<User> optionalUser = userRepository.findById(cartDto.getUserId());
+		CurrentUserSession session = currentUserSessionRepository.findByAuthenticationToken(authenticationToken);
+
+		Optional<User> optionalUser = userRepository.findById(session.getUserId());
 
 		if (optionalUser.isEmpty()) {
-			throw new UserException("No users exists with the given id" + cartDto.getUserId());
+			throw new UserException("No users exists with the given id" + session.getUserId());
 		}
 
 		User user = optionalUser.get();
 
-		Optional<Product> optionalProduct = productRepository.findById(cartDto.getProductDto().getId());
+		Optional<Product> optionalProduct = productRepository.findById(cartDto.getProductId());
 
 		if (optionalProduct.isEmpty()) {
 			throw new ProductException("Product Does not exists with given product id");

@@ -19,4 +19,6 @@ public interface ProductService {
 
 	public void deleteProduct(Integer productId, String authenticationToken) throws UserException, ProductException;
 
+	public Product getProductById(Integer id, String token) throws UserException, ProductException;
+
 }
