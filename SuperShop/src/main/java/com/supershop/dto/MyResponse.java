@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 public class MyResponse {
 
 	private String message;
+	private Boolean authorized;
 	private String authenticationToken;
 
 }

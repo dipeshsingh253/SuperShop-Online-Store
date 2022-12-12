@@ -36,9 +36,7 @@ public class UserSessionController {
 	public ResponseEntity<MyResponse> loginUser(@RequestBody UserDto userDto)
 			throws UserException, CurrentUserServiceException {
 
-		String token = currentUserSessionService.loginUser(userDto);
-
-		MyResponse response = new MyResponse("User Logged in", token);
+		MyResponse response = currentUserSessionService.loginUser(userDto);
 
 		return new ResponseEntity<MyResponse>(response, HttpStatus.ACCEPTED);
 
