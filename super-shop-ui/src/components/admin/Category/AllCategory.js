@@ -29,7 +29,7 @@ const AllCategory = () => {
     <div className="container mx-auto my-8 ">
       <div className="h-12">
         <button
-          onClick={() => navigate("/addemployee")}
+          onClick={() => navigate("/addcategory")}
           className="rounded bg-slate-600 text-white px-6 py-2 font-semibold"
         >
           Add Category
@@ -52,16 +52,20 @@ const AllCategory = () => {
             </tr>
           </thead>
 
-          {!loading && (
-            <tbody className="bg-white">
-              {catogories.map((category) => (
-                <Category
-                  key={category.id}
-                  name={category.name}
-                  id={category.id}
-                />
-              ))}
-            </tbody>
+          {loading || catogories == null ? (
+            <h1>Hey Its empty</h1>
+          ) : (
+            !loading && (
+              <tbody className="bg-white">
+                {catogories.map((category) => (
+                  <Category
+                    key={category.id}
+                    name={category.name}
+                    id={category.id}
+                  />
+                ))}
+              </tbody>
+            )
           )}
         </table>
       </div>

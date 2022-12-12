@@ -29,6 +29,8 @@ const AddCategory = () => {
           title: res.data,
           icon: "success",
         });
+
+        navigate("/allcategory");
       })
       .catch((error) => {
         swal({

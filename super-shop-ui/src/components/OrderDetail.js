@@ -70,12 +70,16 @@ const OrderDetail = () => {
                   </tr>
                 </thead>
 
-                {!loading && (
-                  <tbody>
-                    {orders.map((ord) => (
-                      <Order key={ord.id} order={ord} />
-                    ))}
-                  </tbody>
+                {loading || orders == null ? (
+                  <h1>Order is null</h1>
+                ) : (
+                  !loading && (
+                    <tbody>
+                      {orders.map((ord) => (
+                        <Order key={ord.id} order={ord} />
+                      ))}
+                    </tbody>
+                  )
                 )}
 
                 {/* <tbody>

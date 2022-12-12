@@ -1,8 +1,11 @@
 import React from "react";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import swal from "sweetalert";
 import ProductService from "../../../services/ProductService";
 const AddProduct = () => {
+  const navigate = useNavigate();
+
   const [product, setProduct] = useState({
     category: {
       id: 0,
@@ -47,6 +50,7 @@ const AddProduct = () => {
           title: res.data,
           icon: "success",
         });
+        navigate("/allproduct");
       })
       .catch((error) => {
         swal({

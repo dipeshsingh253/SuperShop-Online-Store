@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import UserService from "../services/UserService";
 import swal from "sweetalert";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 const LoginFrom = () => {
   const [userDto, setUserDto] = useState({
@@ -10,9 +11,9 @@ const LoginFrom = () => {
     password: "",
   });
 
-  const [role, setRole] = useState("admin");
-  const [isloggedIn, setIsloggedIn] = useState(false);
-
+  // const [role, setRole] = useState(null);
+  // const [isloggedIn, setIsloggedIn] = useState(false);
+  // const [token, settoken] = useState(null);
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -23,6 +24,12 @@ const LoginFrom = () => {
     });
   };
 
+  useEffect(() => {
+    // setIsloggedIn(true);
+    const assignVals = () => {};
+    assignVals();
+  }, []);
+
   const loginUser = (e) => {
     e.preventDefault();
 
@@ -32,15 +39,14 @@ const LoginFrom = () => {
           title: res.data.message,
           icon: "success",
         });
-        const token = res.data.authenticationToken;
-        setIsloggedIn(true);
-        localStorage.setItem("token", token);
+        const auth = res.data.authenticationToken;
 
-        localStorage.setItem("isLoggedIn", isloggedIn);
-
-        localStorage.setItem("role", "admin");
-
-        if (role == "admin") {
+        // localStorage.setItem("role", "customer");
+        localStorage.setItem("token", auth);
+        localStorage.setItem("isLoggedIn", true);
+        localStorage.setItem("isAuthenticated", res.data.authorized);
+        console.log(res.data);
+        if (res.data.authorized) {
           navigate("/dashboard");
         } else {
           navigate("/home");
