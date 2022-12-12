@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import swal from "sweetalert";
 import CartService from "../services/CartService";
 
 const SingleProduct = (props) => {
@@ -27,9 +28,17 @@ const SingleProduct = (props) => {
     console.log(cartDto);
     CartService.addItemToCart(cartDto)
       .then((res) => {
+        swal({
+          title: res.data,
+          icon: "success",
+        });
         console.log(res.data);
       })
       .catch((err) => {
+        swal({
+          title: err.response.data.message,
+          icon: "error",
+        });
         console.log(err);
       });
   };

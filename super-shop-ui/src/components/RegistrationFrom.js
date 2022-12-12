@@ -20,7 +20,7 @@ export const RegistrationFrom = () => {
     id: 0,
     lastName: "",
     password: "",
-    role: "admin",
+    role: "customer",
   });
 
   const navigate = useNavigate();

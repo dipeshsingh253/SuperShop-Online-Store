@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import swal from "sweetalert";
 import OrderService from "../services/OrderService";
 
 const CheckOut = (props) => {
@@ -11,9 +12,17 @@ const CheckOut = (props) => {
   const placeOrder = () => {
     OrderService.placeOrder(order)
       .then((res) => {
+        swal({
+          title: res.data,
+          icon: "success",
+        });
         console.log(res.data);
       })
       .catch((err) => {
+        swal({
+          title: err.response.data.message,
+          icon: "error",
+        });
         console.log(err);
       });
   };
