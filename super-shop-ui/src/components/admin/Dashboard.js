@@ -1,11 +1,13 @@
 import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import Navbar from "./general/Navbar";
 
 const Dashboard = () => {
   const isAuthenticated = localStorage.getItem("isAuthenticated");
 
   return (
     <>
+    <Navbar/>
       {!isAuthenticated ? (
         <h1>Not authorized</h1>
       ) : (
@@ -15,19 +17,19 @@ const Dashboard = () => {
               <div class="flex flex-col">
                 <a
                   href="/allcategory"
-                  class="h-10 px-5 m-2 text-indigo-100 transition-colors duration-150 bg-indigo-700 rounded-lg hover:bg-indigo-800 h-12 px-6 m-2 text-lg inline-flex items-center justify-center"
+                  class="h-10 px-5 m-2 text-indigo-100 transition-colors duration-150 bg-indigo-700 rounded-lg hover:bg-indigo-800 text-lg inline-flex items-center justify-center"
                 >
                   Categories
                 </a>
                 <a
                   href="/allproduct"
-                  class="h-10 px-5 m-2 text-indigo-100 transition-colors duration-150 bg-indigo-700 rounded-lg hover:bg-indigo-800 h-12 px-6 m-2 text-lg inline-flex items-center justify-center"
+                  class="h-10 px-5 m-2 text-indigo-100 transition-colors duration-150 bg-indigo-700 rounded-lg hover:bg-indigo-800 text-lg inline-flex items-center justify-center"
                 >
                   Products
                 </a>
                 <a
                   href="#"
-                  class="h-10 px-5 m-2 text-indigo-100 transition-colors duration-150 bg-indigo-700 rounded-lg hover:bg-indigo-800 h-12 px-6 m-2 text-lg inline-flex items-center justify-center"
+                  class="h-10 px-5 m-2 text-indigo-100 transition-colors duration-150 bg-indigo-700 rounded-lg hover:bg-indigo-800 text-lg inline-flex items-center justify-center"
                 >
                   Orders
                 </a>

@@ -4,6 +4,7 @@ import { useState } from "react";
 import ProductService from "../../../services/ProductService";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import Navbar from "../general/Navbar";
 
 const AllProducts = () => {
   const [productData, setproductData] = useState(null);
@@ -29,7 +30,8 @@ const AllProducts = () => {
 
   return (
     <>
-      <div className="h-12">
+      <Navbar />
+      <div className="h-12 m-4">
         <button
           onClick={() => navigate("/addproduct")}
           className="rounded bg-slate-600 text-white px-6 py-2 font-semibold"

@@ -4,7 +4,7 @@ const Product = (props) => {
   const { name, description, imageUrl, price, stock } = props;
 
   return (
-    <div class="flex justify-center">
+    <div class="flex justify-center  py-4">
       <div class="rounded-lg shadow-lg bg-white max-w-sm">
         <a href="#!">
           <img class="rounded-t-lg" src={imageUrl} alt="" />

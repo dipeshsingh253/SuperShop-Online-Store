@@ -4,7 +4,8 @@ import CategoryService from "../../../services/CategoryService";
 import swal from "sweetalert";
 import { useNavigate } from "react-router-dom";
 
-const EditCategory = () => {
+const EditCategory = (props) => {
+  const { id, name } = props;
   const [category, setCategory] = useState({
     id: "",
     name: "",
@@ -29,6 +30,7 @@ const EditCategory = () => {
           title: res.data,
           icon: "success",
         });
+        navigate("/allcategory");
       })
       .catch((error) => {
         swal({

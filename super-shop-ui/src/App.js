@@ -1,6 +1,6 @@
 import { createBrowserRouter, RouterProvider, Route } from "react-router-dom";
-import RegistrationForm from "./components/RegistrationFrom";
-import LoginFrom from "./components/LoginFrom";
+import RegistrationForm from "./components/general/RegistrationFrom";
+import LoginFrom from "./components/general/LoginFrom";
 import Home from "./components/Home";
 import Dashboard from "./components/admin/Dashboard";
 import AddCategory from "./components/admin/Category/AddCategory";
@@ -9,9 +9,10 @@ import AllProduct from "./components/admin/Product/AllProducts";
 import EditProduct from "./components/admin/Product/EditProduct";
 import AllCategory from "./components/admin/Category/AllCategory";
 import EditCategory from "./components/admin/Category/EditCategory";
-import ProductPage from "./components/ProductPage";
-import CartPage from "./components/CartPage";
-import OrderDetail from "./components/OrderDetail";
+import ProductPage from "./components/product/ProductPage";
+import CartPage from "./components/cart/CartPage";
+import OrderDetail from "./components/order/OrderDetail";
+import AllOrder from "./components/admin/order/AllOrder";
 
 const router = createBrowserRouter([
   {
@@ -69,6 +70,10 @@ const router = createBrowserRouter([
   {
     path: "/orders",
     element: <OrderDetail />,
+  },
+  {
+    path: "/allorder",
+    element: <AllOrder />,
   },
 ]);
 
