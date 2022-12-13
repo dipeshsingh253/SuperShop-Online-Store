@@ -10,7 +10,7 @@ SuperShop Online Store is an Online E-commerce application. SuperShop is a moder
 
 
 
-Note : UI is under progress
+Note : UI is under progress for some of the functionality of this application
 ## Features
 
 ### Customer
@@ -23,7 +23,8 @@ Note : UI is under progress
 - Tracking Order
 
 
-### Admin
+### Admin 
+
 
 - All customer operations
 - Create customer, update and remove customer
@@ -44,21 +45,45 @@ Clone the project
 Go to the project directory
 
 ```bash
+
+//Backend
    cd SuperShop
+
+//Frontend
+   //in another terminal window
+   cd super-shop-ui
+
 ```
 
 Install maven
 
 ```bash
+
+//Backend
    // if maven is not installed then instll maven wrapper
 
   ./mvnw install 
+
+//Frontend
+
+  //install dependencies
+
+  npm install
+
+  //
 ```
 
 Start the server
 
 ```bash
+
+//Backend
   ./mvnw spring-boot:run
+
+
+//Frontend
+  
+  npm start
 ```
 
 
@@ -66,12 +91,26 @@ Start the server
 
 **Backend:** SpringBoot IDE, Spring Boot, Maven
 
-**Frontend:** Swagger-UI
+**Frontend:** Swagger-UI, React, HTML, JavaScript, Tailwind CSS
 
-<!--
+## ER Diagram
+
+<img src="./images/super-shop-er.png" alt="screenshot-name" width="100%" height="auto">
+
+
+
+
+<hr/>
+
+
+
 ## Screenshots
 
-![App Screenshot](https://via.placeholder.com/468x300?text=App+Screenshot+Here)
+<img src="./images/super-sop-ui01.png" alt="screenshot-name" width="100%" height="auto">
+<img src="./images/super-sop-ui02.png" alt="screenshot-name" width="100%" height="auto">
+<img src="./images/super-sop-ui03.png" alt="screenshot-name" width="100%" height="auto">
+<img src="./images/super-sop-ui04.png" alt="screenshot-name" width="100%" height="auto">
+<img src="./images/super-sop-ui05.png" alt="screenshot-name" width="100%" height="auto">
+<img src="./images/super-sop-ui06.png" alt="screenshot-name" width="100%" height="auto">
+<img src="./images/super-sop-ui07.png" alt="screenshot-name" width="100%" height="auto">
 
-![App Screenshot](https://via.placeholder.com/468x300?text=App+Screenshot+Here)
--->
