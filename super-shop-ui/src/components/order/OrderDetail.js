@@ -30,7 +30,7 @@ const OrderDetail = () => {
           <div class="py-2 inline-block min-w-full sm:px-6 lg:px-8">
             <div class="overflow-x-auto">
               <table class="min-w-full">
-                <thead class="border-b dark:bg-gray-900">
+                <thead class="border-b dark:bg-gray-900 bg-gray-900">
                   <tr>
                     <th
                       scope="col"
