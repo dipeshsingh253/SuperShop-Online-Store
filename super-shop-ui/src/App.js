@@ -13,6 +13,8 @@ import ProductPage from "./components/product/ProductPage";
 import CartPage from "./components/cart/CartPage";
 import OrderDetail from "./components/order/OrderDetail";
 import AllOrder from "./components/admin/order/AllOrder";
+import AllProducts from "./components/product/AllProducts";
+import ErrorPage from "./components/general/ErrorPage";
 
 const router = createBrowserRouter([
   {
@@ -72,8 +74,16 @@ const router = createBrowserRouter([
     element: <OrderDetail />,
   },
   {
+    path: "/products",
+    element: <AllProducts />,
+  },
+  {
     path: "/allorder",
     element: <AllOrder />,
+  },
+  {
+    path: "/errorpage",
+    element: <ErrorPage />,
   },
 ]);
 

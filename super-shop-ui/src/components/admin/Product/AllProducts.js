@@ -7,9 +7,18 @@ import { useNavigate } from "react-router-dom";
 import Navbar from "../general/Navbar";
 
 const AllProducts = () => {
+  const isAuthenticated = localStorage.getItem("isAuthenticated");
+
+  const navigate = useNavigate();
+  useEffect(() => {
+    if (isAuthenticated == "false") {
+      navigate("/errorpage");
+    }
+  }, []);
+
   const [productData, setproductData] = useState(null);
   const [loading, setloading] = useState(true);
-  const navigate = useNavigate();
+
   useEffect(() => {
     const fetchData = async () => {
       setloading(true);

@@ -9,7 +9,13 @@ const AllCategory = () => {
   const [catogories, setCatogories] = useState(null);
 
   const navigate = useNavigate();
+  const isAuthenticated = localStorage.getItem("isAuthenticated");
 
+  useEffect(() => {
+    if (isAuthenticated == "false") {
+      navigate("/errorpage");
+    }
+  }, []);
   useEffect(() => {
     const fetchData = async () => {
       setloading(true);
@@ -25,7 +31,6 @@ const AllCategory = () => {
 
     fetchData();
   }, []);
-
 
   return (
     <>

@@ -218,6 +218,14 @@ export const RegistrationFrom = () => {
           >
             Register
           </button>
+          <button
+            onClick={() => {
+              navigate("/");
+            }}
+            className="rounded text-white bg-red-500 hover:bg-red-700 px-6 py-2"
+          >
+            Cancel
+          </button>
         </div>
       </div>
     </div>

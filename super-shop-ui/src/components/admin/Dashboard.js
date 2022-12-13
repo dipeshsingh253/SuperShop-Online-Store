@@ -5,9 +5,16 @@ import Navbar from "./general/Navbar";
 const Dashboard = () => {
   const isAuthenticated = localStorage.getItem("isAuthenticated");
 
+  const navigate = useNavigate();
+  useEffect(() => {
+    if (isAuthenticated == "false") {
+      navigate("/errorpage");
+    }
+  }, []);
+
   return (
     <>
-    <Navbar/>
+      <Navbar />
       {!isAuthenticated ? (
         <h1>Not authorized</h1>
       ) : (
