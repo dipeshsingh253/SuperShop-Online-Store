@@ -37,6 +37,13 @@ const AllProducts = () => {
     fetchData();
   }, []);
 
+  const updateProduct = (e, id) => {
+    e.preventDefault();
+
+    navigate(`/editproduct/${id}`);
+  };
+
+
   return (
     <>
       <Navbar />
@@ -56,11 +63,13 @@ const AllProducts = () => {
           productData.map((pro) => (
             <Product
               key={pro.id}
+              id={pro.id}
               name={pro.name}
               description={pro.description}
               imageUrl={pro.imageUrl}
               price={pro.price}
               stock={pro.stock}
+              updateProduct = {updateProduct}
             />
           ))
         )}

@@ -1,11 +1,12 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useState } from "react";
 import CategoryService from "../../../services/CategoryService";
 import swal from "sweetalert";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
-const EditCategory = (props) => {
-  const { id, name } = props;
+const EditCategory = () => {
+  // const id = useParams();
+
   const [category, setCategory] = useState({
     id: "",
     name: "",

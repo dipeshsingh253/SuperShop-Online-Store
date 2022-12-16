@@ -1,9 +1,11 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useState } from "react";
 import CategoryService from "../../../services/CategoryService";
 import swal from "sweetalert";
 import ProductService from "../../../services/ProductService";
+import { useNavigate, useParams } from "react-router-dom";
 const EditProduct = () => {
+  const { id } = useParams();
   const [product, setProduct] = useState({
     category: {
       id: 0,
@@ -16,6 +18,27 @@ const EditProduct = () => {
     price: 0,
     stock: 0,
   });
+
+  const [loading, setLoading] = useState(true);
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchData = async () => {
+      setLoading(true);
+      try {
+        const response = await ProductService.getProductById(id);
+        // console.log(response.data);
+        setProduct(response.data);
+        console.log(product);
+      } catch (error) {
+        console.log(error);
+      }
+      setLoading(false);
+    };
+
+    fetchData();
+  }, []);
 
   const handleChange = (e) => {
     const value = e.target.value;
@@ -48,6 +71,7 @@ const EditProduct = () => {
           title: res.data,
           icon: "success",
         });
+        navigate("/allproduct");
       })
       .catch((error) => {
         console.log(error);
