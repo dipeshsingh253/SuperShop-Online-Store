@@ -32,6 +32,13 @@ const AllCategory = () => {
     fetchData();
   }, []);
 
+  const editCategory = (e,id) =>{
+    e.preventDefault();
+
+    navigate(`/editcategory/${id}`);
+  }
+
+
   return (
     <>
       <Navbar />
@@ -71,6 +78,7 @@ const AllCategory = () => {
                       key={category.id}
                       name={category.name}
                       id={category.id}
+                      editCategory={editCategory}
                     />
                   ))}
                 </tbody>

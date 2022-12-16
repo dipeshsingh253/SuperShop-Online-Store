@@ -18,6 +18,11 @@ class ProductService {
   getProductById(id) {
     return axios.get(`http://localhost:8088/products/${id}`);
   }
+
+  deleteProductById(id){
+    return axios.delete(`http://localhost:8088/products/${id}`);
+  }
+
 }
 
 export default new ProductService();

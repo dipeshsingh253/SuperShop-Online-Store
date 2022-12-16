@@ -50,7 +50,7 @@ const router = createBrowserRouter([
     element: <AllProduct />,
   },
   {
-    path: "/editproduct",
+    path: "/editproduct/:id",
     element: <EditProduct />,
   },
   {
@@ -58,7 +58,7 @@ const router = createBrowserRouter([
     element: <AllCategory />,
   },
   {
-    path: "/editcategory",
+    path: "/editcategory/:id",
     element: <EditCategory />,
   },
   {
