@@ -21,4 +21,5 @@ public interface OrderService {
 	public List<Order> listAllOrders(String authenticationToken)
 			throws OrderException, UserException, CurrentUserServiceException;
 
+    void updateOrder(OrderDto orderDto,String authenticationToken) throws CurrentUserServiceException, OrderException;
 }

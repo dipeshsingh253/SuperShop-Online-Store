@@ -28,9 +28,6 @@ const Order = (props) => {
           <a className="text-indigo-600 hover:text-indigo-800 px-4 cursor-pointer">
             Update
           </a>
-          <a className="text-red-600 hover:text-red-800 px-4 cursor-pointer">
-            Delete
-          </a>
         </td>
       </tr>
     </>
