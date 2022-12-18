@@ -15,6 +15,7 @@ import OrderDetail from "./components/order/OrderDetail";
 import AllOrder from "./components/admin/order/AllOrder";
 import AllProducts from "./components/product/AllProducts";
 import ErrorPage from "./components/general/ErrorPage";
+import UpdateOrder from "./components/admin/order/UpdateOrder";
 
 const router = createBrowserRouter([
   {
@@ -84,6 +85,10 @@ const router = createBrowserRouter([
   {
     path: "/errorpage",
     element: <ErrorPage />,
+  },
+  {
+    path: "/updateorder/:id",
+    element: <UpdateOrder />,
   },
 ]);
 

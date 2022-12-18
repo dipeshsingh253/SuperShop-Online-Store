@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import OrderDetail from "./OrderDetail";
 
 const AllOrder = () => {
   const isAuthenticated = localStorage.getItem("isAuthenticated");
@@ -11,7 +12,11 @@ const AllOrder = () => {
     }
   }, []);
 
-  return <div>AllOrder</div>;
+  return (
+    <div>
+      <OrderDetail />
+    </div>
+  );
 };
 
 export default AllOrder;
