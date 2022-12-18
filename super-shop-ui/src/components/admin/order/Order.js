@@ -1,7 +1,7 @@
 import React from "react";
 
 const Order = (props) => {
-  const { order } = props;
+  const { order, updateOrder } = props;
 
   return (
     <>
@@ -25,7 +25,8 @@ const Order = (props) => {
           {order.payment.amount}
         </td>
         <td className=" text-right px-6 py-4 whitespace-nowrap font-medium text-sm">
-          <a className="text-indigo-600 hover:text-indigo-800 px-4 cursor-pointer">
+          <a onClick={(e)=>{updateOrder(e,order.id)}}  
+          className="text-indigo-600 hover:text-indigo-800 px-4 cursor-pointer">
             Update
           </a>
         </td>

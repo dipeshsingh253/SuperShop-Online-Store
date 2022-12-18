@@ -15,6 +15,13 @@ class OrderService {
   getAllOrders() {
     return axios.get(`http://localhost:8088/orders?token=${TOKEN}`);
   }
+
+  updateOrder(orderDto) {
+    return axios.put(
+      `http://localhost:8088/updateorder?token=${TOKEN}`,
+      orderDto
+    );
+  }
 }
 
 export default new OrderService();

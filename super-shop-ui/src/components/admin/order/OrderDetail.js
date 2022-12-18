@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import OrderService from "../../../services/OrderService";
 import Navbar from "../general/Navbar";
 import Order from "./Order";
@@ -6,6 +7,8 @@ import Order from "./Order";
 const OrderDetail = () => {
   const [loading, setLoading] = useState(true);
   const [orders, setOrders] = useState(null);
+  const navigate = useNavigate();
+
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
@@ -21,6 +24,13 @@ const OrderDetail = () => {
 
     fetchData();
   }, []);
+
+  const updateOrder = (e, id) => {
+    console.log("Hello World");
+    e.preventDefault();
+
+    navigate(`/updateorder/${id}`);
+  };
 
   return (
     <>
@@ -84,7 +94,11 @@ const OrderDetail = () => {
                   !loading && (
                     <tbody>
                       {orders.map((ord) => (
-                        <Order key={ord.id} order={ord} />
+                        <Order
+                          key={ord.id}
+                          order={ord}
+                          updateOrder={updateOrder}
+                        />
                       ))}
                     </tbody>
                   )

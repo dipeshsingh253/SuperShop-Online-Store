@@ -6,6 +6,8 @@ import ProductService from "../../../services/ProductService";
 import { useNavigate, useParams } from "react-router-dom";
 const EditProduct = () => {
   const { id } = useParams();
+
+  // console.log(id);
   const [product, setProduct] = useState({
     category: {
       id: 0,
