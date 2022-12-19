@@ -18,6 +18,31 @@ import org.springframework.web.context.request.WebRequest;
 public class GlobalExceptionHandler {
 
 
+//    @ExceptionHandler(MethodArgumentNotValidException.class)
+//    public ResponseEntity<Map<String, String>> exceptionHandler(MethodArgumentNotValidException exception, WebRequest request) {
+//
+//        Map<String, String> res = new HashMap<>();
+//
+//        exception.getBindingResult().getAllErrors().forEach((error) -> {
+//            res.put(((FieldError) error).getField(), error.getDefaultMessage());
+//        });
+//
+//        return new ResponseEntity<Map<String, String>>(res, HttpStatus.BAD_REQUEST);
+//
+//    }
+
+//    @ExceptionHandler(MethodArgumentNotValidException.class)
+//    public ResponseEntity<MyErroDetails> methodArgumentNotValidHandler(
+//            MethodArgumentNotValidException methodArgumentNotValidException) {
+//        MyErroDetails errorDetail;
+//        errorDetail = new MyErroDetails("Validation error",
+//                methodArgumentNotValidException
+//                        .getBindingResult()
+//                        .getFieldError()
+//                        .getDefaultMessage(), LocalDateTime.now());
+//        return new ResponseEntity<>(errorDetail, HttpStatus.BAD_REQUEST);
+//    }
+
     @ExceptionHandler(UserException.class)
     public ResponseEntity<MyErroDetails> exceptionHandler(UserException exception, WebRequest request) {
 
@@ -27,6 +52,7 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<MyErroDetails>(myErroDetails, HttpStatus.BAD_REQUEST);
 
     }
+
 
     @ExceptionHandler(CurrentUserServiceException.class)
     public ResponseEntity<MyErroDetails> exceptionHandler(CurrentUserServiceException exception, WebRequest request) {
@@ -58,18 +84,6 @@ public class GlobalExceptionHandler {
 
     }
 
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<Map<String, String>> exceptionHandler(MethodArgumentNotValidException exception, WebRequest request) {
-
-        Map<String, String> res = new HashMap<>();
-
-        exception.getBindingResult().getAllErrors().forEach((error) -> {
-            res.put(((FieldError) error).getField(), error.getDefaultMessage());
-        });
-
-        return new ResponseEntity<Map<String, String>>(res, HttpStatus.BAD_REQUEST);
-
-    }
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<MyErroDetails> exceptionHandler(Exception exception, WebRequest request) {
