@@ -23,6 +23,8 @@ public class OrderController {
     @Autowired
     private OrderService orderService;
 
+
+    // place order
     @PostMapping("/orders")
     public ResponseEntity<String> makeOrder(@RequestParam String token, @RequestBody OrderDto orderDto)
             throws OrderException, UserException, CurrentUserServiceException, CartException {
@@ -33,6 +35,7 @@ public class OrderController {
 
     }
 
+    // list order by user id
     @GetMapping("/orders/{id}")
     public ResponseEntity<List<Order>> listOrdersByUserId(@RequestParam String token,
                                                           @PathVariable("id") Integer userId) throws OrderException, UserException, CurrentUserServiceException {
@@ -43,6 +46,8 @@ public class OrderController {
 
     }
 
+
+    // list all orders
     @GetMapping("/orders")
     public ResponseEntity<List<Order>> listAllOrders(@RequestParam String token)
             throws OrderException, UserException, CurrentUserServiceException {
@@ -54,6 +59,7 @@ public class OrderController {
     }
 
 
+    // update order
     @PutMapping("/updateorder")
     public ResponseEntity<String> updateOrder(@RequestParam String token, @RequestBody OrderDto orderDto) throws CurrentUserServiceException, OrderException {
 

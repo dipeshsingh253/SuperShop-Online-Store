@@ -32,6 +32,7 @@ public class CartController {
 	@Autowired
 	private CartService cartService;
 
+	// adding item to cart
 	@PostMapping("/additemtocart")
 	public ResponseEntity<String> addItemToCart(@RequestParam String authenticationToken,
 			@RequestBody AddItemToCartDto cartDto)
@@ -43,6 +44,7 @@ public class CartController {
 
 	}
 
+	// update cart
 	@PutMapping("/cart")
 	public ResponseEntity<String> updateCartItem(@RequestParam String authenticationToken,
 			@RequestBody CartItemDto cartDto)
@@ -53,6 +55,7 @@ public class CartController {
 		return new ResponseEntity<String>("Item updated to cart", HttpStatus.ACCEPTED);
 	}
 
+	// get cart by user id
 	@GetMapping("/carts/user")
 	public ResponseEntity<CartDto> getCartByUserId(@RequestParam String authenticationToken)
 			throws CartException, UserException, CurrentUserServiceException {
@@ -63,6 +66,8 @@ public class CartController {
 
 	}
 
+
+	// delete item from cart
 	@DeleteMapping("/cart")
 	public ResponseEntity<String> removeItemFromcart(@RequestParam String authenticationToken,
 			@RequestBody CartItemDto cartDto)
