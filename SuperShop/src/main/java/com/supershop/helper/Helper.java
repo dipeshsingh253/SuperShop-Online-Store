@@ -7,27 +7,22 @@ import com.supershop.repository.CurrentUserSessionRepository;
 
 public class Helper {
 
-	public static boolean isLoggedIn(String token, CurrentUserSessionRepository currentUserSessionRepository) {
 
-		CurrentUserSession currentUserSession = currentUserSessionRepository.findByAuthenticationToken(token);
+    // this is a helper class which contains two static methods that checks if the user is logged in or not
+    // and if the user is logged in then he / she is admin or not
+    public static boolean isLoggedIn(String token, CurrentUserSessionRepository currentUserSessionRepository) {
 
-		if (currentUserSession == null) {
-			return false;
-		}
+        CurrentUserSession currentUserSession = currentUserSessionRepository.findByAuthenticationToken(token);
 
-		return true;
+        return currentUserSession != null;
 
-	}
+    }
 
-	public static boolean isAdmin(String token, CurrentUserSessionRepository currentUserSessionRepository) {
+    public static boolean isAdmin(String token, CurrentUserSessionRepository currentUserSessionRepository) {
 
-		CurrentUserSession currenUserSession = currentUserSessionRepository.findByAuthenticationToken(token);
+        CurrentUserSession currenUserSession = currentUserSessionRepository.findByAuthenticationToken(token);
 
-		if (currenUserSession.getRole().equals("admin")) {
-			return true;
-		}
-
-		return false;
-	}
+        return currenUserSession.getRole().equals("admin");
+    }
 
 }

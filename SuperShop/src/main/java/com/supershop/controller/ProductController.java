@@ -28,6 +28,9 @@ public class ProductController {
 	@Autowired
 	private ProductService productService;
 
+
+
+	// create a new product
 	@PostMapping("/products")
 	public ResponseEntity<String> createProduct(@RequestParam String token, @RequestBody Product product)
 			throws UserException, ProductException, CategoryException {
@@ -38,6 +41,8 @@ public class ProductController {
 
 	}
 
+
+	// update product
 	@PutMapping("/products")
 	public ResponseEntity<String> updateProduct(@RequestParam String token, @RequestBody Product product)
 			throws UserException, ProductException, CategoryException {
@@ -48,6 +53,8 @@ public class ProductController {
 
 	}
 
+
+	// list all the available products
 	@GetMapping("/products")
 	public ResponseEntity<List<Product>> listAllProducts()
 			throws UserException, ProductException {
@@ -58,6 +65,9 @@ public class ProductController {
 
 	}
 
+
+	// delete product
+	// Note : you can not delete a product if any cart or order have reference to that product in database
 	@DeleteMapping("/products/{id}")
 	public ResponseEntity<String> deleteProduct(@PathVariable("id") Integer id, @RequestParam String token)
 			throws UserException, ProductException {
@@ -68,6 +78,8 @@ public class ProductController {
 
 	}
 
+
+	// get a single product by product id
 	@GetMapping("/products/{id}")
 	public ResponseEntity<Product> getProductById(@PathVariable("id") Integer id)
 			throws UserException, ProductException {

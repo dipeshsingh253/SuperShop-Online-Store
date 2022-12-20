@@ -14,6 +14,9 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -28,23 +31,28 @@ import lombok.NoArgsConstructor;
 @Table(name = "orders")
 public class Order {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
 
-	private LocalDateTime createDateTime;
-	
-	
-	@JsonIgnore
-	@ManyToOne
-	@JoinColumn(name = "user_id", referencedColumnName = "id")
-	private User user;
+    private LocalDateTime createDateTime;
 
-	@Embedded
-	private Payment payment;
 
-	@OneToMany(mappedBy = "order", fetch = FetchType.EAGER)
-	private List<OrderItem> orderItems;
+    @NotNull
+    @JsonIgnore
+    @ManyToOne
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    private User user;
 
-	private String orderStatus;
+
+    @Embedded
+    private Payment payment;
+
+
+    @NotEmpty
+    @OneToMany(mappedBy = "order", fetch = FetchType.EAGER)
+    private List<OrderItem> orderItems;
+
+    @NotBlank
+    private String orderStatus;
 }

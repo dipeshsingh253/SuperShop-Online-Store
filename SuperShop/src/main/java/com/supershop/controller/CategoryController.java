@@ -26,6 +26,8 @@ public class CategoryController {
 	@Autowired
 	private CategoryService categoryService;
 
+
+	// create a new category
 	@PostMapping("/categories")
 	public ResponseEntity<String> createCategory(@RequestParam String token, @RequestBody Category category)
 			throws CategoryException, UserException {
@@ -36,6 +38,8 @@ public class CategoryController {
 
 	}
 
+
+	// update category
 	@PutMapping("/categories")
 	public ResponseEntity<String> updateCategory(@RequestParam String token, @RequestBody Category category)
 			throws CategoryException, UserException {
@@ -46,6 +50,9 @@ public class CategoryController {
 
 	}
 
+
+	// delete category
+	// Note : you can not delete a category if any product have reference to that category in product table
 	@DeleteMapping("/categories/{id}")
 	public ResponseEntity<String> deleteCategory(@PathVariable("id") Integer id, @RequestParam String token)
 			throws CategoryException, UserException {
@@ -56,6 +63,7 @@ public class CategoryController {
 
 	}
 
+	// get list of all categories
 	@GetMapping("categories")
 	public ResponseEntity<List<Category>> listAllCategories(@RequestParam String token)
 			throws CategoryException, UserException {

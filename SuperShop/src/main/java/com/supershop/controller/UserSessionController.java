@@ -32,6 +32,8 @@ public class UserSessionController {
 	@Autowired
 	private UserService userService;
 
+
+	// user login => this will create session in for user
 	@PostMapping("/login")
 	public ResponseEntity<MyResponse> loginUser(@RequestBody UserDto userDto)
 			throws UserException, CurrentUserServiceException {
@@ -42,6 +44,7 @@ public class UserSessionController {
 
 	}
 
+	// user logout => this will delete existed session for user
 	@DeleteMapping("/logout")
 	public ResponseEntity<String> logoutUser(@RequestParam String authenticationToken)
 			throws UserException, CurrentUserServiceException {
@@ -52,6 +55,7 @@ public class UserSessionController {
 
 	}
 
+	// register new user
 	@PostMapping("/register")
 	public ResponseEntity<String> registerUser(@RequestBody User user) throws UserException {
 
@@ -61,6 +65,8 @@ public class UserSessionController {
 
 	}
 
+
+	// list all the available users
 	@GetMapping("/users")
 	public ResponseEntity<List<User>> listAllUsers(@RequestParam String authenticationToken)
 			throws UserException, CurrentUserServiceException {
@@ -70,6 +76,7 @@ public class UserSessionController {
 		return new ResponseEntity<List<User>>(users, HttpStatus.ACCEPTED);
 	}
 
+	// update user details
 	@PutMapping("/users")
 	public ResponseEntity<String> updateUser(@RequestParam String authenticationToken, @RequestBody User user)
 			throws UserException, CurrentUserServiceException {
@@ -80,6 +87,8 @@ public class UserSessionController {
 
 	}
 
+
+	// delete user
 	@DeleteMapping("/users")
 	public ResponseEntity<String> deleteUser(@RequestParam String email, @RequestParam String authenticationToken)
 			throws UserException, CurrentUserServiceException {
