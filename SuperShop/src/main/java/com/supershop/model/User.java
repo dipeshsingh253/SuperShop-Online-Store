@@ -6,11 +6,9 @@ import java.util.List;
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotEmpty;
+
 import javax.validation.constraints.Size;
 
-import org.hibernate.annotations.NotFound;
-import org.hibernate.annotations.NotFoundAction;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -46,7 +44,7 @@ public class User {
     private Address address;
     private String role;
 
-    @NotEmpty
+    @NotBlank
     @Size(min = 8, message = "password should have at least 8 characters")
     private String password;
 
