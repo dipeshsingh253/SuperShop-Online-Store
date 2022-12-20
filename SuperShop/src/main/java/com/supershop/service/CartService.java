@@ -16,8 +16,6 @@ public interface CartService {
 	public void addItemToCart(AddItemToCartDto cartDto, String authenticationToken)
 			throws CartException, CurrentUserServiceException, UserException, ProductException;
 
-//	public void updateCart(Cart cart, String authenticationToken) throws CartException, CurrentUserServiceException;
-
 	public void removeCartItem(CartItemDto cartDto, String authenticationToken) throws CartException, CurrentUserServiceException, UserException, ProductException;
 
 	public CartDto getCartByUser(String authenticationToken) throws CartException, UserException, CurrentUserServiceException;

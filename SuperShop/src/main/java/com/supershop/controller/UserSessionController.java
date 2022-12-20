@@ -33,6 +33,16 @@ public class UserSessionController {
 	private UserService userService;
 
 
+	/*
+	/login => Post => login user and provide them an authentication token
+	/logout => Delete => logout user and delete an authentication token associated with that user
+	/register => Post =>  register new user
+	/users => Get => list all the available users
+	/users => Put => update user details
+	/users => Delete => delete user
+	 */
+
+
 	// user login => this will create session in for user
 	@PostMapping("/login")
 	public ResponseEntity<MyResponse> loginUser(@RequestBody UserDto userDto)

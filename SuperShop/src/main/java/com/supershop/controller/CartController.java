@@ -29,54 +29,63 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 @RestController
 public class CartController {
 
-	@Autowired
-	private CartService cartService;
-
-	// adding item to cart
-	@PostMapping("/additemtocart")
-	public ResponseEntity<String> addItemToCart(@RequestParam String authenticationToken,
-			@RequestBody AddItemToCartDto cartDto)
-			throws CartException, CurrentUserServiceException, UserException, ProductException {
-
-		cartService.addItemToCart(cartDto, authenticationToken);
-
-		return new ResponseEntity<String>("Item added to cart", HttpStatus.ACCEPTED);
-
-	}
-
-	// update cart
-	@PutMapping("/cart")
-	public ResponseEntity<String> updateCartItem(@RequestParam String authenticationToken,
-			@RequestBody CartItemDto cartDto)
-			throws CartException, CurrentUserServiceException, UserException, ProductException {
-
-		cartService.updateCartItem(cartDto, authenticationToken);
-
-		return new ResponseEntity<String>("Item updated to cart", HttpStatus.ACCEPTED);
-	}
-
-	// get cart by user id
-	@GetMapping("/carts/user")
-	public ResponseEntity<CartDto> getCartByUserId(@RequestParam String authenticationToken)
-			throws CartException, UserException, CurrentUserServiceException {
-
-		CartDto userCart = cartService.getCartByUser(authenticationToken);
-
-		return new ResponseEntity<CartDto>(userCart, HttpStatus.OK);
-
-	}
+    @Autowired
+    private CartService cartService;
 
 
-	// delete item from cart
-	@DeleteMapping("/cart")
-	public ResponseEntity<String> removeItemFromcart(@RequestParam String authenticationToken,
-			@RequestBody CartItemDto cartDto)
-			throws CartException, CurrentUserServiceException, UserException, ProductException {
+	/*
+		/additemtocart => Post => adding item to cart
+		/cart =>  Put => update cart
+		/carts/user => Get => get cart by user id
+		/cart => Delete => delete item from cart
 
-		cartService.removeCartItem(cartDto, authenticationToken);
+	 */
 
-		return new ResponseEntity<String>("Item removed from cart", HttpStatus.OK);
+    // adding item to cart
+    @PostMapping("/additemtocart")
+    public ResponseEntity<String> addItemToCart(@RequestParam String authenticationToken,
+                                                @RequestBody AddItemToCartDto cartDto)
+            throws CartException, CurrentUserServiceException, UserException, ProductException {
 
-	}
+        cartService.addItemToCart(cartDto, authenticationToken);
+
+        return new ResponseEntity<String>("Item added to cart", HttpStatus.ACCEPTED);
+
+    }
+
+    // update cart
+    @PutMapping("/cart")
+    public ResponseEntity<String> updateCartItem(@RequestParam String authenticationToken,
+                                                 @RequestBody CartItemDto cartDto)
+            throws CartException, CurrentUserServiceException, UserException, ProductException {
+
+        cartService.updateCartItem(cartDto, authenticationToken);
+
+        return new ResponseEntity<String>("Item updated to cart", HttpStatus.ACCEPTED);
+    }
+
+    // get cart by user id
+    @GetMapping("/carts/user")
+    public ResponseEntity<CartDto> getCartByUserId(@RequestParam String authenticationToken)
+            throws CartException, UserException, CurrentUserServiceException {
+
+        CartDto userCart = cartService.getCartByUser(authenticationToken);
+
+        return new ResponseEntity<CartDto>(userCart, HttpStatus.OK);
+
+    }
+
+
+    // delete item from cart
+    @DeleteMapping("/cart")
+    public ResponseEntity<String> removeItemFromcart(@RequestParam String authenticationToken,
+                                                     @RequestBody CartItemDto cartDto)
+            throws CartException, CurrentUserServiceException, UserException, ProductException {
+
+        cartService.removeCartItem(cartDto, authenticationToken);
+
+        return new ResponseEntity<String>("Item removed from cart", HttpStatus.OK);
+
+    }
 
 }

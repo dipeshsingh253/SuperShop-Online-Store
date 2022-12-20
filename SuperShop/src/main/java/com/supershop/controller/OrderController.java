@@ -23,6 +23,15 @@ public class OrderController {
     @Autowired
     private OrderService orderService;
 
+    /*
+
+        /orders => Post => place order
+        /orders/{id} => Get => list order by user id
+        /orders => Get => list all orders
+        /updateorder => Put => update order
+
+     */
+
 
     // place order
     @PostMapping("/orders")

@@ -36,11 +36,15 @@ public class OrderItem {
 	private LocalDateTime createDateTime;
 
 
+
+	// many order items can belong to a same order
 	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name = "order_id", referencedColumnName = "id")
 	private Order order;
 
+
+	// every order item will have reference to the ordered product
 	@OneToOne
 	@JoinColumn(name = "product_id", referencedColumnName = "id")
 	private Product product;
