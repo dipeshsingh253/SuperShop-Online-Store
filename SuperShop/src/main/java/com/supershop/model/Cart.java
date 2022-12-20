@@ -36,10 +36,14 @@ public class Cart {
 	@NotNull
 	private LocalDateTime createDateTime;
 
+
+	// cart will have reference to product
 	@ManyToOne
 	@JoinColumn(name = "product_id", referencedColumnName = "id")
 	private Product product;
 
+
+	// and cart will also have reference to user who added that product to cart
 	@JsonIgnore
 	@OneToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "user_id", referencedColumnName = "id")

@@ -46,6 +46,7 @@ public class Product {
     private Integer stock;
 
 
+    // every product belongs to a category
     @NotNull
     @OneToOne
     @JoinColumn(name = "category_id", referencedColumnName = "id")

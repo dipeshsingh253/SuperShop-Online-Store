@@ -48,6 +48,8 @@ public class User {
     @Size(min = 8, message = "password should have at least 8 characters")
     private String password;
 
+
+    // one User can have many orders
     @JsonIgnore
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     private List<Order> orders;

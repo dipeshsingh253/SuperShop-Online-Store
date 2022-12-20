@@ -25,69 +25,78 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 @RestController
 public class ProductController {
 
-	@Autowired
-	private ProductService productService;
+    @Autowired
+    private ProductService productService;
+
+	/*
+
+		/products => Post => create a new product
+		/products => Put =>  update product
+		/products => Get => list all products
+		/products/{id} => Delete => delete product
+		/products/{id} => Get => get a single product by product id
+
+	 */
 
 
+    // create a new product
+    @PostMapping("/products")
+    public ResponseEntity<String> createProduct(@RequestParam String token, @RequestBody Product product)
+            throws UserException, ProductException, CategoryException {
 
-	// create a new product
-	@PostMapping("/products")
-	public ResponseEntity<String> createProduct(@RequestParam String token, @RequestBody Product product)
-			throws UserException, ProductException, CategoryException {
+        productService.createProduct(product, token);
 
-		productService.createProduct(product, token);
+        return new ResponseEntity<String>("Product Created", HttpStatus.ACCEPTED);
 
-		return new ResponseEntity<String>("Product Created", HttpStatus.ACCEPTED);
-
-	}
-
-
-	// update product
-	@PutMapping("/products")
-	public ResponseEntity<String> updateProduct(@RequestParam String token, @RequestBody Product product)
-			throws UserException, ProductException, CategoryException {
-
-		productService.updateProduct(product, token);
-
-		return new ResponseEntity<String>("Product Updated", HttpStatus.ACCEPTED);
-
-	}
+    }
 
 
-	// list all the available products
-	@GetMapping("/products")
-	public ResponseEntity<List<Product>> listAllProducts()
-			throws UserException, ProductException {
+    // update product
+    @PutMapping("/products")
+    public ResponseEntity<String> updateProduct(@RequestParam String token, @RequestBody Product product)
+            throws UserException, ProductException, CategoryException {
 
-		List<Product> products = productService.listAllPrdoucts();
+        productService.updateProduct(product, token);
 
-		return new ResponseEntity<List<Product>>(products, HttpStatus.OK);
+        return new ResponseEntity<String>("Product Updated", HttpStatus.ACCEPTED);
 
-	}
-
-
-	// delete product
-	// Note : you can not delete a product if any cart or order have reference to that product in database
-	@DeleteMapping("/products/{id}")
-	public ResponseEntity<String> deleteProduct(@PathVariable("id") Integer id, @RequestParam String token)
-			throws UserException, ProductException {
-
-		productService.deleteProduct(id, token);
-
-		return new ResponseEntity<String>("Product deleted", HttpStatus.OK);
-
-	}
+    }
 
 
-	// get a single product by product id
-	@GetMapping("/products/{id}")
-	public ResponseEntity<Product> getProductById(@PathVariable("id") Integer id)
-			throws UserException, ProductException {
+    // list all the available products
+    @GetMapping("/products")
+    public ResponseEntity<List<Product>> listAllProducts()
+            throws UserException, ProductException {
 
-		Product product = productService.getProductById(id);
+        List<Product> products = productService.listAllPrdoucts();
 
-		return new ResponseEntity<Product>(product, HttpStatus.OK);
+        return new ResponseEntity<List<Product>>(products, HttpStatus.OK);
 
-	}
+    }
+
+
+    // delete product
+    // Note : you can not delete a product if any cart or order have reference to that product in database
+    @DeleteMapping("/products/{id}")
+    public ResponseEntity<String> deleteProduct(@PathVariable("id") Integer id, @RequestParam String token)
+            throws UserException, ProductException {
+
+        productService.deleteProduct(id, token);
+
+        return new ResponseEntity<String>("Product deleted", HttpStatus.OK);
+
+    }
+
+
+    // get a single product by product id
+    @GetMapping("/products/{id}")
+    public ResponseEntity<Product> getProductById(@PathVariable("id") Integer id)
+            throws UserException, ProductException {
+
+        Product product = productService.getProductById(id);
+
+        return new ResponseEntity<Product>(product, HttpStatus.OK);
+
+    }
 
 }

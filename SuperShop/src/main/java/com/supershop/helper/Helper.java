@@ -10,6 +10,7 @@ public class Helper {
 
     // this is a helper class which contains two static methods that checks if the user is logged in or not
     // and if the user is logged in then he / she is admin or not
+    // I am mainly validating via authentication tokens
     public static boolean isLoggedIn(String token, CurrentUserSessionRepository currentUserSessionRepository) {
 
         CurrentUserSession currentUserSession = currentUserSessionRepository.findByAuthenticationToken(token);

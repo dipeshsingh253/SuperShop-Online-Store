@@ -38,6 +38,7 @@ public class Order {
     private LocalDateTime createDateTime;
 
 
+    // every order will have some user associated with it
     @NotNull
     @JsonIgnore
     @ManyToOne
@@ -45,10 +46,13 @@ public class Order {
     private User user;
 
 
+    // every order must contain payment details
+    @NotNull
     @Embedded
     private Payment payment;
 
 
+    // one order can have multiple order items
     @NotEmpty
     @OneToMany(mappedBy = "order", fetch = FetchType.EAGER)
     private List<OrderItem> orderItems;
