@@ -53,7 +53,6 @@ public class Order {
 
 
     // one order can have multiple order items
-    @NotEmpty
     @OneToMany(mappedBy = "order", fetch = FetchType.EAGER)
     private List<OrderItem> orderItems;
 
