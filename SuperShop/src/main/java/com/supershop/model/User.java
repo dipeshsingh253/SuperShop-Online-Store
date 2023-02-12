@@ -40,7 +40,7 @@ public class User {
     @Email
     private String email;
 
-    @Embedded
+    @OneToOne(cascade = CascadeType.ALL)
     private Address address;
     private String role;
 

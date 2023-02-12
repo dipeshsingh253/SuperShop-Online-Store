@@ -2,6 +2,8 @@ package com.supershop.controller;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,6 +27,8 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 @RestController
 public class ProductController {
 
+    Logger logger = LoggerFactory.getLogger(ProductController.class);
+
     @Autowired
     private ProductService productService;
 
@@ -46,6 +50,8 @@ public class ProductController {
 
         productService.createProduct(product, token);
 
+        logger.info("Product Created");
+
         return new ResponseEntity<String>("Product Created", HttpStatus.ACCEPTED);
 
     }
@@ -57,6 +63,8 @@ public class ProductController {
             throws UserException, ProductException, CategoryException {
 
         productService.updateProduct(product, token);
+
+        logger.info("Product Updated");
 
         return new ResponseEntity<String>("Product Updated", HttpStatus.ACCEPTED);
 
@@ -82,6 +90,8 @@ public class ProductController {
             throws UserException, ProductException {
 
         productService.deleteProduct(id, token);
+
+        logger.warn("Product Deleted");
 
         return new ResponseEntity<String>("Product deleted", HttpStatus.OK);
 

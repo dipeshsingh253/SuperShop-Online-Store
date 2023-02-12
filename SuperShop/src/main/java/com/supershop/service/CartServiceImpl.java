@@ -48,7 +48,6 @@ public class CartServiceImpl implements CartService {
 
 		if (!Helper.isLoggedIn(authenticationToken, currentUserSessionRepository)) {
 
-			System.out.println(authenticationToken);
 
 			throw new CurrentUserServiceException(" Log in required ");
 
@@ -93,8 +92,6 @@ public class CartServiceImpl implements CartService {
 
 		cartRepository.save(newCart);
 
-		System.out.println("new item added to cart successfully");
-
 	}
 
 	@Override
@@ -129,7 +126,6 @@ public class CartServiceImpl implements CartService {
 		}
 
 		cartRepository.delete(existedCart);
-		System.out.println("Product removed");
 
 	}
 
@@ -171,8 +167,6 @@ public class CartServiceImpl implements CartService {
 			ProductDto pDto = new ProductDto();
 
 			BeanUtils.copyProperties(p, pDto);
-
-			System.out.println(c);
 
 			CartItemDto cartItemDto = new CartItemDto();
 			cartItemDto.setId(c.getId());

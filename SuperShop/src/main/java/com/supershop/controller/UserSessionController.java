@@ -2,6 +2,9 @@ package com.supershop.controller;
 
 import java.util.List;
 
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,6 +29,7 @@ import com.supershop.service.UserService;
 @RestController
 public class UserSessionController {
 
+	Logger logger = LoggerFactory.getLogger(UserSessionController.class);
 	@Autowired
 	private CurrentUserSessionService currentUserSessionService;
 
@@ -50,6 +54,9 @@ public class UserSessionController {
 
 		MyResponse response = currentUserSessionService.loginUser(userDto);
 
+		logger.info("Login Successful");
+		logger.info("Session Started");
+
 		return new ResponseEntity<MyResponse>(response, HttpStatus.ACCEPTED);
 
 	}
@@ -61,6 +68,9 @@ public class UserSessionController {
 
 		currentUserSessionService.logoutUser(authenticationToken);
 
+		logger.info("Logged Out");
+		logger.info("Session Ended");
+
 		return new ResponseEntity<String>("User Logged Out", HttpStatus.OK);
 
 	}
@@ -70,6 +80,8 @@ public class UserSessionController {
 	public ResponseEntity<String> registerUser(@RequestBody User user) throws UserException {
 
 		userService.registerUser(user);
+
+		logger.info("User Registered");
 
 		return new ResponseEntity<String>("User registered", HttpStatus.ACCEPTED);
 
@@ -93,6 +105,8 @@ public class UserSessionController {
 
 		userService.updateUser(user, authenticationToken);
 
+		logger.info("User Updated");
+
 		return new ResponseEntity<String>("User updated", HttpStatus.ACCEPTED);
 
 	}
@@ -104,6 +118,9 @@ public class UserSessionController {
 			throws UserException, CurrentUserServiceException {
 
 		userService.deleteUser(email, authenticationToken);
+
+		logger.warn("User Deleted");
+
 		return new ResponseEntity<String>("User deleted", HttpStatus.ACCEPTED);
 	}
 

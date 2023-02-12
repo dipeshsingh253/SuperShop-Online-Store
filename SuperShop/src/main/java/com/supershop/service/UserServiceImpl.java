@@ -34,7 +34,6 @@ public class UserServiceImpl implements UserService {
 
 		userRepository.save(user);
 
-		System.out.println("User Saved Successfully");
 
 	}
 
@@ -76,7 +75,6 @@ public class UserServiceImpl implements UserService {
 
 			userRepository.save(user);
 
-			System.out.println("User updated by admin successfully");
 		} else {
 
 			CurrentUserSession currentUserSession = currentUserSessionRepository.findByEmail(user.getEmail());
@@ -111,7 +109,6 @@ public class UserServiceImpl implements UserService {
 
 			currentUserSessionRepository.delete(currentUserSession);
 
-			System.out.println("User deletd by admin successfully");
 		} else {
 
 			CurrentUserSession currentUserSession = currentUserSessionRepository.findByEmail(email);
