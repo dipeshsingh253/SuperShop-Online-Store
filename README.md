@@ -76,7 +76,9 @@ Install maven
 Start the server
 
 ```bash
-
+ // before starting the server 'spring.sql.init.mode=always' this line in application.properties file
+ // once server started successfuly then uncomment above commented line from application.properties and re run the server
+ // this way data.sql will be executed successfuly 
 //Backend
   ./mvnw spring-boot:run
 
@@ -89,9 +91,9 @@ Start the server
 
 ## Tech Stack
 
-**Backend:** SpringBoot IDE, Spring Boot, Maven
+**Backend:** SpringBoot, Maven, Hibernate, MySql, MVC
 
-**Frontend:** Swagger-UI, React, HTML, JavaScript, Tailwind CSS
+**Frontend:** React, HTML, JavaScript, Tailwind CSS
 
 ## ER Diagram
 
