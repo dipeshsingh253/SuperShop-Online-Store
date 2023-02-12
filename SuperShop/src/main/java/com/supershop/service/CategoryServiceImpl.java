@@ -36,7 +36,6 @@ public class CategoryServiceImpl implements CategoryService {
 
 			categoryRepository.save(category);
 
-			System.out.println("Category saved ");
 
 		} else {
 			throw new UserException("You are not allowed to perform this operation");
@@ -57,7 +56,6 @@ public class CategoryServiceImpl implements CategoryService {
 
 			categoryRepository.save(category);
 
-			System.out.println("Category updated");
 
 		} else {
 			throw new UserException("You are not allowed to perform this operation");
@@ -78,7 +76,6 @@ public class CategoryServiceImpl implements CategoryService {
 
 			categoryRepository.delete(existedCategory);
 
-			System.out.println("Category deleted");
 
 		} else {
 			throw new UserException("You are not allowed to perform this operation");

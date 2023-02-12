@@ -19,7 +19,7 @@ public class CurrentUserSession {
 
 	@Id
 	private Integer userId;
-	private LocalDateTime sessionStarteDateTime;
+	private LocalDateTime sessionStartedDateTime;
 
 	@NotBlank
 	private String authenticationToken;

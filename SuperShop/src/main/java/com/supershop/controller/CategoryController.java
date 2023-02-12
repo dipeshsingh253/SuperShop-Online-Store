@@ -2,6 +2,8 @@ package com.supershop.controller;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,6 +26,8 @@ import com.supershop.service.CategoryService;
 @RestController
 public class CategoryController {
 
+    Logger logger = LoggerFactory.getLogger(CategoryController.class);
+
     @Autowired
     private CategoryService categoryService;
 /*
@@ -40,6 +44,8 @@ public class CategoryController {
 
         categoryService.createCategory(category, token);
 
+        logger.info("Category Created");
+
         return new ResponseEntity<String>("Category Created", HttpStatus.ACCEPTED);
 
     }
@@ -51,6 +57,8 @@ public class CategoryController {
             throws CategoryException, UserException {
 
         categoryService.updateCategory(category, token);
+
+        logger.info("Category Updated");
 
         return new ResponseEntity<String>("Category Updated", HttpStatus.ACCEPTED);
 
@@ -64,6 +72,8 @@ public class CategoryController {
             throws CategoryException, UserException {
 
         categoryService.deleteCategory(id, token);
+
+        logger.warn("Category Deleted");
 
         return new ResponseEntity<String>("Category Deleted", HttpStatus.OK);
 

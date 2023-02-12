@@ -2,6 +2,8 @@ package com.supershop.controller;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,6 +31,8 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 @RestController
 public class CartController {
 
+    Logger logger = LoggerFactory.getLogger(CartController.class);
+
     @Autowired
     private CartService cartService;
 
@@ -49,6 +53,8 @@ public class CartController {
 
         cartService.addItemToCart(cartDto, authenticationToken);
 
+        logger.info("Item added to cart");
+
         return new ResponseEntity<String>("Item added to cart", HttpStatus.ACCEPTED);
 
     }
@@ -60,6 +66,9 @@ public class CartController {
             throws CartException, CurrentUserServiceException, UserException, ProductException {
 
         cartService.updateCartItem(cartDto, authenticationToken);
+
+        logger.info("Cart Updated");
+
 
         return new ResponseEntity<String>("Item updated to cart", HttpStatus.ACCEPTED);
     }
@@ -83,6 +92,8 @@ public class CartController {
             throws CartException, CurrentUserServiceException, UserException, ProductException {
 
         cartService.removeCartItem(cartDto, authenticationToken);
+
+        logger.info("Item removed from cart");
 
         return new ResponseEntity<String>("Item removed from cart", HttpStatus.OK);
 

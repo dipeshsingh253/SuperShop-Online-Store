@@ -35,7 +35,6 @@ public class CurrentUserSessionServiceImpl implements CurrentUserSessionService 
 		}
 
 		if (!user.getPassword().equals(userDto.getPassword())) {
-			System.out.println(user.getPassword() + userDto.getPassword());
 
 			throw new UserException("Enter valid email or password");
 		}
@@ -53,7 +52,6 @@ public class CurrentUserSessionServiceImpl implements CurrentUserSessionService 
 
 		currentUserSessionRepository.save(newUserSession);
 
-		System.out.println("Session Started successfully");
 		MyResponse  response = new MyResponse();
 		response.setMessage("Log in Successfull");
 		response.setAuthenticationToken(token);
@@ -74,7 +72,6 @@ public class CurrentUserSessionServiceImpl implements CurrentUserSessionService 
 
 		currentUserSessionRepository.delete(currenUserSession);
 
-		System.out.println("Log out successfull");
 
 	}
 
