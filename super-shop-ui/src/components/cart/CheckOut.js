@@ -3,7 +3,7 @@ import swal from "sweetalert";
 import OrderService from "../../services/OrderService";
 
 const CheckOut = (props) => {
-  const { quantity, totalCost } = props;
+  const { quantity, totalCost, fetchData } = props;
 
   const [order, setOrder] = useState({
     paymentMethod: "online-payment",
@@ -21,16 +21,20 @@ const CheckOut = (props) => {
         swal({
           title: res.data,
           icon: "success",
+          button:false
         });
-        console.log(res.data);
+        window.location.reload();
       })
       .catch((err) => {
         swal({
           title: err.response.data.message,
           icon: "error",
         });
-        console.log(err);
+
       });
+
+
+
   };
 
   return (

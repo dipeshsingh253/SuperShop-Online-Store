@@ -67,11 +67,12 @@ export const RegistrationFrom = () => {
   return (
     <div className="flex rounded justify-center items-center w-3/4 mx-auto my-8">
       <div className="px-8 py-8">
+
         <div className="font-bold text-2xl tracking-wider">
           <h1>Registration Page</h1>
         </div>
 
-        {/* Input Fields */}
+        {/* User */}
         <div className="items-center justify-center h-14 w-full my-4">
           <label className="block text-gray-600 text-sm font-normal">
             First Name
@@ -120,7 +121,11 @@ export const RegistrationFrom = () => {
             className="h-10 w-96 border mt-2 px-2 py-2"
           ></input>
         </div>
-        <br></br>
+
+
+          {/* Address */}
+
+
         <div className="font-bold text-xl tracking-wider">
           <h1>Address</h1>
         </div>
@@ -209,6 +214,7 @@ export const RegistrationFrom = () => {
           ></input>
         </div>
 
+
         {/* Buttons */}
 
         <div className="items-center justify-center h-14 w-full my-4 space-x-4 pt-4">
@@ -227,6 +233,13 @@ export const RegistrationFrom = () => {
             Cancel
           </button>
         </div>
+
+        <div className="text-indigo-500">
+          <a href="/login">
+            Already have an account ? 
+          </a>
+        </div>
+        
       </div>
     </div>
   );

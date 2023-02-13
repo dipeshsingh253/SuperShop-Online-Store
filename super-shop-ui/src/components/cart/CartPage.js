@@ -10,21 +10,25 @@ const CartPage = () => {
   const [cartItems, setCartItems] = useState([]);
   const [cartDetails, setCartDetails] = useState(null);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      setLoading(true);
-      try {
-        const response = await CartService.getCartByUser();
-        console.log(response.data);
-        setCartDetails(response.data);
-        setCartItems(response.data.cartItems);
-      } catch (error) {
-        console.log(error);
-      }
-      setLoading(false);
-    };
+  const fetchData = async () => {
 
+
+    setLoading(true);
+    try {
+      const response = await CartService.getCartByUser();
+
+      setCartDetails(response.data);
+      setCartItems(response.data.cartItems);
+    } catch (error) {
+
+    }
+    setLoading(false);
+  };
+
+  useEffect(() => {
+  
     fetchData();
+
   }, []);
 
   return (
@@ -86,6 +90,7 @@ const CartPage = () => {
             <CheckOut
               quantity={cartItems.length}
               totalCost={cartDetails.totalCost}
+              fetchData={fetchData}
             />
           )}
         </div>

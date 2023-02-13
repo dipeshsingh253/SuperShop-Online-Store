@@ -3,7 +3,7 @@ import swal from "sweetalert";
 import CartService from "../../services/CartService";
 
 const SingleProduct = (props) => {
-  const { id, name, description, imageUrl, price, stock } = props;
+  const { id, name, description, imageUrl, price, stock, fetchData } = props;
 
   const [cartDto, setCartDto] = useState({
     productId: id,
@@ -12,7 +12,6 @@ const SingleProduct = (props) => {
   });
 
   const handleChange = (e) => {
-    console.log(e.target.name);
 
     const value = e.target.value;
 
@@ -25,27 +24,38 @@ const SingleProduct = (props) => {
   };
 
   const addItemToCart = () => {
-    console.log(cartDto);
+
     CartService.addItemToCart(cartDto)
       .then((res) => {
         swal({
           title: res.data,
           icon: "success",
         });
-        console.log(res.data);
+
+        fetchData();
+        
+
       })
       .catch((err) => {
         swal({
           title: err.response.data.message,
           icon: "error",
         });
-        console.log(err);
+
       });
   };
 
   return (
     <div class="2xl:container 2xl:mx-auto lg:py-16 lg:px-20 md:py-12 md:px-6 py-9 px-4">
       <div class="flex justify-center items-center lg:flex-row flex-col gap-8">
+
+      <div class="w-full sm:w-96 md:w-8/12 lg:w-6/12 flex lg:flex-row flex-col lg:gap-8 sm:gap-6 gap-4">
+          <div class="w-full bg-gray-100 flex justify-center items-center">
+            <img src={imageUrl} alt={name} />
+          </div>
+        </div>
+
+
         <div class="w-full sm:w-96 md:w-8/12 lg:w-6/12 items-center">
           {/* <p class="focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-800 font-normal text-base leading-4 text-gray-600  dark:text-white">
             Home / Furniture / Wooden Stool
@@ -90,11 +100,6 @@ const SingleProduct = (props) => {
           </button>
         </div>
 
-        <div class="w-full sm:w-96 md:w-8/12 lg:w-6/12 flex lg:flex-row flex-col lg:gap-8 sm:gap-6 gap-4">
-          <div class="w-full bg-gray-100 flex justify-center items-center">
-            <img src={imageUrl} alt={name} />
-          </div>
-        </div>
       </div>
     </div>
   );

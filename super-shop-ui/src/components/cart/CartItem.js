@@ -3,6 +3,9 @@ import React from "react";
 const CartItem = (props) => {
   const { name, image, price, quantity, total } = props;
 
+
+  
+
   return (
     <div className="flex items-center hover:bg-gray-100 -mx-8 px-6 py-5">
       <div className="flex w-2/5">

@@ -5,44 +5,39 @@ import UserService from "../../services/UserService";
 import AdminNavbar from "../admin/general/Navbar";
 
 const Navbar = () => {
-  // const navigate = useNavigate();
-  // const handleClick = (e) => {
-  //   console.log(e.target.getAttribute("href"));
-  // };
-
   const toggleMenu = () => {
-    console.log("hello");
     const menu = document.getElementById("navbar-default");
-    console.log(menu);
+
     menu.classList.toggle("hidden");
   };
   const [action, setAction] = useState("");
-  const isLoggedin = localStorage.getItem("isLoggedIn");
 
-  console.log(typeof isLoggedin);
+  const status = localStorage.getItem("isLoggedIn");
+
   const navigate = useNavigate();
-  useEffect(() => {
-    const updateAction = () => {
-      if (isLoggedin == "true") {
-        setAction("Logout");
-      } else if (isLoggedin == "false") {
-        setAction("Login");
-      }
-    };
 
+  const updateAction = () => {
+    const isLoggedIn = localStorage.getItem("isLoggedIn");
+
+    if (isLoggedIn == "true") {
+      setAction("Logout");
+    } else {
+      setAction("Register");
+    }
+  };
+
+  useEffect(() => {
     updateAction();
   }, []);
 
   const logOut = () => {
-    if (isLoggedin == "false") {
-      console.log("hello");
-      navigate("/login");
+    if (status == null || status == "false") {
+      navigate("/register");
       return;
     }
+
     UserService.logOutUser()
       .then((res) => {
-        console.log(res);
-
         swal({
           title: res.data,
           icon: "success",
@@ -51,13 +46,14 @@ const Navbar = () => {
         localStorage.setItem("isLoggedIn", false);
         localStorage.setItem("token", null);
         localStorage.setItem("isAuthenticated", false);
+
+        updateAction();
       })
       .catch((err) => {
         swal({
           title: err.response.data.message,
           icon: "error",
         });
-        console.log(err);
       });
   };
 
@@ -70,7 +66,7 @@ const Navbar = () => {
       ) : (
         <nav class="bg-white border-gray-200 px-2 sm:px-4 py-2.5 rounded dark:bg-gray-900 border-b-4">
           <div class="container flex flex-wrap items-center justify-between mx-auto">
-            <a href="https://flowbite.com/" class="flex items-center">
+            <a href="/" class="flex items-center">
               {/* <img
                 src="https://flowbite.com/docs/images/logo.svg"
                 class="h-6 mr-3 sm:h-9"
@@ -146,14 +142,6 @@ const Navbar = () => {
                     class="block py-2 pl-3 pr-4 text-gray-700 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-gray-400 md:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
                   >
                     {action}
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="/register"
-                    class="block py-2 pl-3 pr-4 text-gray-700 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-gray-400 md:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
-                  >
-                    Register
                   </a>
                 </li>
               </ul>
