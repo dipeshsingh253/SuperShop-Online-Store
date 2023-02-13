@@ -9,23 +9,22 @@ const ProductPage = () => {
 
   const [loading, setLoading] = useState(true);
 
-  const navigate = useNavigate();
-
   const [product, setProduct] = useState(null);
 
+  const fetchData = async () => {
+    setLoading(true);
+    try {
+      const response = await ProductService.getProductById(id);
+      // console.log(response.data);
+      setProduct(response.data);
+
+    } catch (error) {
+
+    }
+    setLoading(false);
+  };
   useEffect(() => {
-    const fetchData = async () => {
-      setLoading(true);
-      try {
-        const response = await ProductService.getProductById(id);
-        // console.log(response.data);
-        setProduct(response.data);
-        console.log(product);
-      } catch (error) {
-        console.log(error);
-      }
-      setLoading(false);
-    };
+    
 
     fetchData();
   }, []);
@@ -42,6 +41,7 @@ const ProductPage = () => {
           imageUrl={product.imageUrl}
           price={product.price}
           stock={product.stock}
+          fetchData={fetchData}
         />
       )}
     </div>

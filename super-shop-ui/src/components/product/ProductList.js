@@ -13,7 +13,7 @@ const ProductList = () => {
       try {
         const response = await ProductService.getAllProducts();
         setproductData(response.data);
-        console.log(response.data[0].category.name);
+
       } catch (error) {}
       setloading(false);
     };
