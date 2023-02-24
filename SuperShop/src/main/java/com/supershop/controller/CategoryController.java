@@ -16,33 +16,37 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.CrossOrigin;
-
 import com.supershop.exception.CategoryException;
 import com.supershop.exception.UserException;
 import com.supershop.model.Category;
 import com.supershop.service.CategoryService;
 
+/**
+ * RestController for Category functioning.
+ */
+
 @CrossOrigin("http://localhost:3000/")
 @RestController
 public class CategoryController {
 
-    Logger logger = LoggerFactory.getLogger(CategoryController.class);
+    private final Logger logger = LoggerFactory.getLogger(CategoryController.class);
 
     @Autowired
     private CategoryService categoryService;
-/*
-    /categories => Post => create a new category
-    /categories => Put => update category
-    /categories/{id} => Delete  => delete category
-    /categories => Get => get list of all categories
- */
 
-    // create a new category
+    /**
+     * Create a new category.
+     * @param authenticationToken User authentication taken unique for every logged-in user
+     * @param category new category to be created
+     * @return ResponseEntity {@link String} message to be displayed to the user as response
+     * @throws CategoryException if category already exist
+     * @throws UserException if user details are not valid or user unavailable
+     */
     @PostMapping("/categories")
-    public ResponseEntity<String> createCategory(@RequestParam String token, @RequestBody Category category)
+    public ResponseEntity<String> createCategory(@RequestParam String authenticationToken, @RequestBody Category category)
             throws CategoryException, UserException {
 
-        categoryService.createCategory(category, token);
+        categoryService.createCategory(category, authenticationToken);
 
         logger.info("Category Created");
 
@@ -51,42 +55,61 @@ public class CategoryController {
     }
 
 
-    // update category
+    /**
+     * Update category.
+     * @param authenticationToken User authentication taken unique for every logged-in user
+     * @param category category to be updated
+     * @return ResponseEntity {@link String} message to be displayed to the user as response
+     * @throws CategoryException if category does not exist
+     * @throws UserException if user details are not valid or user unavailable
+     */
     @PutMapping("/categories")
-    public ResponseEntity<String> updateCategory(@RequestParam String token, @RequestBody Category category)
+    public ResponseEntity<String> updateCategory(@RequestParam String authenticationToken, @RequestBody Category category)
             throws CategoryException, UserException {
 
-        categoryService.updateCategory(category, token);
+        categoryService.updateCategory(category, authenticationToken);
 
         logger.info("Category Updated");
 
-        return new ResponseEntity<String>("Category Updated", HttpStatus.ACCEPTED);
+        return new ResponseEntity<>("Category Updated", HttpStatus.ACCEPTED);
 
     }
 
 
-    // delete category
-    // Note : you can not delete a category if any product have reference to that category in product table
+    /**
+     * Delete category. A category can not be deleted if any product belong to that category
+     * @param id category id to be deleted
+     * @param authenticationToken User authentication taken unique for every logged-in user
+     * @return ResponseEntity {@link String} message to be displayed to the user as response
+     * @throws CategoryException if category does not exist
+     * @throws UserException if user details are not valid or user unavailable
+     */
     @DeleteMapping("/categories/{id}")
-    public ResponseEntity<String> deleteCategory(@PathVariable("id") Integer id, @RequestParam String token)
+    public ResponseEntity<String> deleteCategory(@PathVariable("id") Integer id, @RequestParam String authenticationToken)
             throws CategoryException, UserException {
 
-        categoryService.deleteCategory(id, token);
+        categoryService.deleteCategory(id, authenticationToken);
 
         logger.warn("Category Deleted");
 
-        return new ResponseEntity<String>("Category Deleted", HttpStatus.OK);
+        return new ResponseEntity<>("Category Deleted", HttpStatus.OK);
 
     }
 
-    // get list of all categories
+    /**
+     * Fetch list of all available categories
+     * @param authenticationToken User authentication taken unique for every logged-in user
+     * @return ResponseEntity {@link List<Category>} message to be displayed to the user as response
+     * @throws CategoryException if category does not exist
+     * @throws UserException if user details are not valid or user unavailable
+     */
     @GetMapping("/categories")
-    public ResponseEntity<List<Category>> listAllCategories(@RequestParam String token)
+    public ResponseEntity<List<Category>> listAllCategories(@RequestParam String authenticationToken)
             throws CategoryException, UserException {
 
-        List<Category> categories = categoryService.listAllCategories(token);
+        List<Category> categories = categoryService.listAllCategories(authenticationToken);
 
-        return new ResponseEntity<List<Category>>(categories, HttpStatus.OK);
+        return new ResponseEntity<>(categories, HttpStatus.OK);
     }
 
 }
