@@ -13,7 +13,7 @@ import com.supershop.model.Order;
 public interface OrderService {
 
 	public void makeOrder(OrderDto orderDto, String authenticationToken)
-			throws OrderException, UserException, CurrentUserServiceException, CartException;
+			throws  UserException, CurrentUserServiceException, CartException;
 
 	public List<Order> listOrdersByUserId(Integer userId, String authenticationToken)
 			throws OrderException, UserException, CurrentUserServiceException;

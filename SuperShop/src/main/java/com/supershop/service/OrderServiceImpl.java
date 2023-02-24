@@ -48,7 +48,7 @@ public class OrderServiceImpl implements OrderService {
     @Transactional
     @Override
     public void makeOrder(OrderDto orderDto, String authenticationToken)
-            throws OrderException, UserException, CurrentUserServiceException, CartException {
+            throws UserException, CurrentUserServiceException, CartException {
 
         if (!Helper.isLoggedIn(authenticationToken, currentUserSessionRepository)) {
             throw new CurrentUserServiceException("login required");
