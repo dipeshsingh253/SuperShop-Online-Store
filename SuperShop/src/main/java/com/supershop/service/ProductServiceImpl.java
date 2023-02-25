@@ -1,10 +1,10 @@
 package com.supershop.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import com.supershop.exception.CategoryException;
 import com.supershop.exception.ProductException;
 import com.supershop.exception.UserException;
@@ -15,18 +15,26 @@ import com.supershop.repository.CategoryRepository;
 import com.supershop.repository.CurrentUserSessionRepository;
 import com.supershop.repository.ProductRepository;
 
+
+/**
+ * Implementation of {@link ProductService}. This implementation class will contain all the business logic for product functioning.
+ */
+
+
 @Service
 public class ProductServiceImpl implements ProductService {
 
 	@Autowired
 	private CurrentUserSessionRepository currentUserSessionRepository;
-
 	@Autowired
 	private ProductRepository productRepository;
-
 	@Autowired
 	private CategoryRepository categoryRepository;
 
+
+	/**
+     * {@inheritDoc}
+     */
 	@Override
 	public void createProduct(Product product, String authenticationToken)
 			throws UserException, ProductException, CategoryException {
@@ -54,6 +62,10 @@ public class ProductServiceImpl implements ProductService {
 
 	}
 
+
+    /**
+     * {@inheritDoc}
+     */
 	@Override
 	public void updateProduct(Product product, String authenticationToken)
 			throws UserException, ProductException, CategoryException {
@@ -79,9 +91,12 @@ public class ProductServiceImpl implements ProductService {
 		}
 	}
 
+
+    /**
+     * {@inheritDoc}
+     */
 	@Override
 	public List<Product> listAllPrdoucts() throws ProductException, UserException {
-		// if (Helper.isLoggedIn(authenticationToken, currentUserSessionRepository)) {
 
 		List<Product> products = productRepository.findAll();
 
@@ -90,22 +105,23 @@ public class ProductServiceImpl implements ProductService {
 		}
 
 		return products;
-
-//		} else {
-//			throw new UserException("You don't have access to perform this operation or log in as an admin");
-//		}
 	}
 
+    /**
+     * {@inheritDoc}
+     */
 	@Override
 	public void deleteProduct(Integer productId, String authenticationToken) throws ProductException, UserException {
 		if (Helper.isLoggedIn(authenticationToken, currentUserSessionRepository)
 				&& Helper.isAdmin(authenticationToken, currentUserSessionRepository)) {
 
-			Product existedProduct = productRepository.findById(productId).get();
+			Optional<Product> optionalProduct = productRepository.findById(productId);
 
-			if (existedProduct == null) {
+			if (optionalProduct.isEmpty()) {
 				throw new ProductException("Product does not exist");
 			}
+
+			Product existedProduct = optionalProduct.get();
 
 			productRepository.delete(existedProduct);
 
@@ -113,23 +129,19 @@ public class ProductServiceImpl implements ProductService {
 			throw new UserException("You don't have access to perform this operation or log in as an admin");
 		}
 	}
-
+    /**
+     * {@inheritDoc}
+     */
 	@Override
 	public Product getProductById(Integer id) throws UserException, ProductException {
 
-		// if (Helper.isLoggedIn(token, currentUserSessionRepository)) {
+		Optional<Product> optionalProduct = productRepository.findById(id);
 
-		Product existedProduct = productRepository.findById(id).get();
-
-		if (existedProduct == null) {
+		if (optionalProduct.isEmpty()) {
 			throw new ProductException("Product does not exist");
 		}
 
-		return existedProduct;
-
-//		} else {
-//			throw new UserException("You don't have access to perform this operation or log in as an admin");
-//		}
+		return optionalProduct.get();
 
 	}
 

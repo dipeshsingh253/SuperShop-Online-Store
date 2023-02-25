@@ -99,7 +99,7 @@ public class UserSessionController {
 	/**
 	 * Fetch all user available in database. Can only be used by authorized users like Admin and Owner.
 	 * @param authenticationToken User authentication taken unique for every logged-in user
-	 * @return ResponseEntity {@link String} message to be displayed to the user as response
+	 * @return ResponseEntity {@link List<User>} to be displayed to the user as response
 	 * @throws UserException if no user available in database
 	 * @throws CurrentUserServiceException if user is not authorized or authenticated
 	 */

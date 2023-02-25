@@ -4,11 +4,9 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import com.supershop.dto.AddItemToCartDto;
 import com.supershop.dto.CartDto;
 import com.supershop.dto.CartItemDto;
@@ -27,21 +25,27 @@ import com.supershop.repository.CurrentUserSessionRepository;
 import com.supershop.repository.ProductRepository;
 import com.supershop.repository.UserRepository;
 
+/**
+ * Implementation of {@link CartService}. This implementation class will contain all the business logic for cart functioning.
+ */
+
+
 @Service
 public class CartServiceImpl implements CartService {
 
 	@Autowired
 	private CurrentUserSessionRepository currentUserSessionRepository;
-
 	@Autowired
 	private UserRepository userRepository;
-
 	@Autowired
 	private CartRepository cartRepository;
-
 	@Autowired
 	private ProductRepository productRepository;
 
+
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void addItemToCart(AddItemToCartDto cartDto, String authenticationToken)
 			throws CartException, CurrentUserServiceException, UserException, ProductException {
@@ -49,7 +53,7 @@ public class CartServiceImpl implements CartService {
 		if (!Helper.isLoggedIn(authenticationToken, currentUserSessionRepository)) {
 
 
-			throw new CurrentUserServiceException(" Log in required ");
+			throw new CurrentUserServiceException("Log in required");
 
 		}
 
@@ -94,6 +98,10 @@ public class CartServiceImpl implements CartService {
 
 	}
 
+
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void removeCartItem(CartItemDto cartDto, String authenticationToken)
 			throws CartException, CurrentUserServiceException, UserException, ProductException {
@@ -129,6 +137,10 @@ public class CartServiceImpl implements CartService {
 
 	}
 
+
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public CartDto getCartByUser(String authenticationToken)
 			throws CartException, UserException, CurrentUserServiceException {
@@ -202,6 +214,10 @@ public class CartServiceImpl implements CartService {
 
 	}
 
+
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void updateCartItem(CartItemDto cartDto, String authenticationToken)
 			throws CartException, CurrentUserServiceException, UserException, ProductException {

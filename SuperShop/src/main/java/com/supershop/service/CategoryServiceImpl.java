@@ -4,24 +4,30 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import com.supershop.exception.CategoryException;
 import com.supershop.exception.UserException;
 import com.supershop.helper.Helper;
 import com.supershop.model.Category;
-import com.supershop.model.CurrentUserSession;
 import com.supershop.repository.CategoryRepository;
 import com.supershop.repository.CurrentUserSessionRepository;
+
+
+/**
+ * Implementation of {@link CategoryService}. This implementation class will contain all the business logic for category functioning.
+ */
 
 @Service
 public class CategoryServiceImpl implements CategoryService {
 
 	@Autowired
 	private CurrentUserSessionRepository currentUserSessionRepository;
-
 	@Autowired
 	private CategoryRepository categoryRepository;
 
+
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void createCategory(Category category, String authenticationToken) throws CategoryException, UserException {
 
@@ -43,6 +49,10 @@ public class CategoryServiceImpl implements CategoryService {
 
 	}
 
+
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void updateCategory(Category category, String authenticationToken) throws CategoryException, UserException {
 		if (Helper.isLoggedIn(authenticationToken, currentUserSessionRepository)
@@ -63,6 +73,11 @@ public class CategoryServiceImpl implements CategoryService {
 
 	}
 
+
+
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void deleteCategory(Integer categoryId, String authenticationToken) throws CategoryException, UserException {
 		if (Helper.isLoggedIn(authenticationToken, currentUserSessionRepository)
@@ -82,6 +97,11 @@ public class CategoryServiceImpl implements CategoryService {
 		}
 	}
 
+
+
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public List<Category> listAllCategories(String authenticationToken) throws CategoryException, UserException {
 		if (Helper.isLoggedIn(authenticationToken, currentUserSessionRepository)

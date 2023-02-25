@@ -4,7 +4,6 @@ import java.time.LocalDateTime;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import com.supershop.dto.MyResponseDto;
 import com.supershop.dto.UserDto;
 import com.supershop.exception.CurrentUserServiceException;
@@ -13,8 +12,13 @@ import com.supershop.model.CurrentUserSession;
 import com.supershop.model.User;
 import com.supershop.repository.CurrentUserSessionRepository;
 import com.supershop.repository.UserRepository;
-
 import net.bytebuddy.utility.RandomString;
+
+
+/**
+ * Implementation of {@link CurrentUserSessionService}. This implementation class will contain all the business logic for current user session functioning.
+ */
+
 
 @Service
 public class CurrentUserSessionServiceImpl implements CurrentUserSessionService {
@@ -25,6 +29,10 @@ public class CurrentUserSessionServiceImpl implements CurrentUserSessionService 
 	@Autowired
 	private UserRepository userRepository;
 
+
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public MyResponseDto loginUser(UserDto userDto) throws UserException, CurrentUserServiceException {
 
@@ -39,9 +47,9 @@ public class CurrentUserSessionServiceImpl implements CurrentUserSessionService 
 			throw new UserException("Enter valid email or password");
 		}
 
-		CurrentUserSession currenUserSession = currentUserSessionRepository.findByEmail(userDto.getEmail());
+		CurrentUserSession currentUserSession = currentUserSessionRepository.findByEmail(userDto.getEmail());
 
-		if (currenUserSession != null) {
+		if (currentUserSession != null) {
 			throw new CurrentUserServiceException("User already logged in");
 		}
 
@@ -53,13 +61,17 @@ public class CurrentUserSessionServiceImpl implements CurrentUserSessionService 
 		currentUserSessionRepository.save(newUserSession);
 
 		MyResponseDto response = new MyResponseDto();
-		response.setMessage("Log in Successfull");
+		response.setMessage("Log in Successful");
 		response.setAuthenticationToken(token);
-		response.setAuthorized(user.getRole().equals("admin")?  true : false);	
+		response.setAuthorized(user.getRole().equals("admin"));
 		return response;
 
 	}
 
+
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void logoutUser(String authenticationToken) throws UserException, CurrentUserServiceException {
 
@@ -67,39 +79,41 @@ public class CurrentUserSessionServiceImpl implements CurrentUserSessionService 
 			throw new CurrentUserServiceException("User not logged in");
 		}
 
-		CurrentUserSession currenUserSession = currentUserSessionRepository
+		CurrentUserSession currentUserSession = currentUserSessionRepository
 				.findByAuthenticationToken(authenticationToken);
 
-		currentUserSessionRepository.delete(currenUserSession);
+		currentUserSessionRepository.delete(currentUserSession);
 
 
 	}
 
+
+
+
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public boolean isLoggedIn(String authenticationToken) {
 
-		CurrentUserSession currenUserSession = currentUserSessionRepository
+		CurrentUserSession currentUserSession = currentUserSessionRepository
 				.findByAuthenticationToken(authenticationToken);
 
-		if (currenUserSession == null) {
-			return false;
-		}
-
-		return true;
+		return currentUserSession != null;
 
 	}
 
+
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public boolean isAdmin(String authenticationToken) throws CurrentUserServiceException {
 
-		CurrentUserSession currenUserSession = currentUserSessionRepository
+		CurrentUserSession currentUserSession = currentUserSessionRepository
 				.findByAuthenticationToken(authenticationToken);
 
-		if (currenUserSession.getRole().equals("admin")) {
-			return true;
-		}
-
-		return false;
+		return currentUserSession.getRole().equals("admin");
 	}
 
 }

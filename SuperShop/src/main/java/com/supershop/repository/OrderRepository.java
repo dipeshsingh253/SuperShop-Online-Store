@@ -1,9 +1,7 @@
 package com.supershop.repository;
 
 import java.util.List;
-
 import org.springframework.data.jpa.repository.JpaRepository;
-
 import com.supershop.model.Order;
 import com.supershop.model.User;
 

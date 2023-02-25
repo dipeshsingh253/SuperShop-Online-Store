@@ -23,6 +23,12 @@ import com.supershop.model.Payment;
 import com.supershop.model.User;
 import com.supershop.repository.*;
 
+/**
+ * Implementation of {@link OrderService}. This implementation class will contain all the business logic for order functioning.
+ */
+
+
+
 @Service
 public class OrderServiceImpl implements OrderService {
 
@@ -40,7 +46,9 @@ public class OrderServiceImpl implements OrderService {
 
     @Autowired
     private OrderItemRepository orderItemRepository;
-
+    /**
+     * {@inheritDoc}
+     */
     @Transactional
     @Override
     public void makeOrder(OrderDto orderDto, String authenticationToken)
@@ -50,9 +58,6 @@ public class OrderServiceImpl implements OrderService {
             throw new CurrentUserServiceException("login required");
 
         }
-        /// this way a customer can only book products for their self just like real
-        /// worlds and admins are also not allowed to make orders for anyone else except
-        /// themselves
 
         CurrentUserSession session = currentUserSessionRepository.findByAuthenticationToken(authenticationToken);
 
@@ -113,7 +118,9 @@ public class OrderServiceImpl implements OrderService {
 
         cartRepository.deleteByUser(user);
     }
-
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<Order> listOrdersByUserId(Integer userId, String authenticationToken)
             throws OrderException, UserException, CurrentUserServiceException {
@@ -144,7 +151,9 @@ public class OrderServiceImpl implements OrderService {
 
         return orders;
     }
-
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<Order> listAllOrders(String authenticationToken)
             throws OrderException, UserException, CurrentUserServiceException {
@@ -167,7 +176,9 @@ public class OrderServiceImpl implements OrderService {
 
         return allOrders;
     }
-
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void updateOrder(OrderDto orderDto, String authenticationToken) throws CurrentUserServiceException, OrderException {
         if (!Helper.isLoggedIn(authenticationToken, currentUserSessionRepository)) {

@@ -3,7 +3,6 @@ package com.supershop.repository;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-
 import com.supershop.model.Cart;
 import com.supershop.model.Product;
 import com.supershop.model.User;

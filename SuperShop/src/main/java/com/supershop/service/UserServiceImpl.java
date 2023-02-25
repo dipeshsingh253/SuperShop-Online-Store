@@ -4,15 +4,19 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import com.supershop.exception.CurrentUserServiceException;
 import com.supershop.exception.UserException;
 import com.supershop.helper.Helper;
 import com.supershop.model.CurrentUserSession;
 import com.supershop.model.User;
-import com.supershop.repository.CartRepository;
 import com.supershop.repository.CurrentUserSessionRepository;
 import com.supershop.repository.UserRepository;
+
+
+
+/**
+ * Implementation of {@link ProductService}. This implementation class will contain all the business logic for product functioning.
+ */
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -23,6 +27,10 @@ public class UserServiceImpl implements UserService {
 	@Autowired
 	private CurrentUserSessionRepository currentUserSessionRepository;
 
+
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void registerUser(User user) throws UserException {
 
@@ -37,6 +45,9 @@ public class UserServiceImpl implements UserService {
 
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public List<User> listAllUsers(String authenticationToken) throws UserException, CurrentUserServiceException {
 
@@ -58,6 +69,10 @@ public class UserServiceImpl implements UserService {
 
 	}
 
+
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void updateUser(User user, String authenticationToken) throws UserException, CurrentUserServiceException {
 
@@ -80,7 +95,7 @@ public class UserServiceImpl implements UserService {
 			CurrentUserSession currentUserSession = currentUserSessionRepository.findByEmail(user.getEmail());
 
 			if (!currentUserSession.getAuthenticationToken().equals(authenticationToken)) {
-				throw new CurrentUserServiceException("Chaeck user email id");
+				throw new CurrentUserServiceException("Check user email id");
 			}
 
 			userRepository.save(user);
@@ -89,6 +104,10 @@ public class UserServiceImpl implements UserService {
 
 	}
 
+
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void deleteUser(String email, String authenticationToken) throws UserException, CurrentUserServiceException {
 
@@ -114,7 +133,7 @@ public class UserServiceImpl implements UserService {
 			CurrentUserSession currentUserSession = currentUserSessionRepository.findByEmail(email);
 
 			if (!currentUserSession.getAuthenticationToken().equals(authenticationToken)) {
-				throw new CurrentUserServiceException("Chaeck user email id");
+				throw new CurrentUserServiceException("Check user email id");
 			}
 
 			userRepository.delete(userRepository.findByEmail(email));
