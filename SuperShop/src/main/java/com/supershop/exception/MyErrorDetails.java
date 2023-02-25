@@ -11,7 +11,7 @@ import lombok.ToString;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-public class MyErroDetails {
+public class MyErrorDetails {
 
 	private String message;
 	private String description;

@@ -1,15 +1,20 @@
 package com.supershop.model;
 
 import javax.persistence.*;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+
+/**
+ * Entity model for address table.
+ */
 
 @Entity
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Table(name = "address")
 public class Address {
 
 	@Id

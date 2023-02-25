@@ -10,20 +10,23 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+/**
+ * Entity Model for order_product table.
+ */
+
+
 
 @Entity
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "ordereditems")
-public class OrderItem {
+@Table(name = "order_product")
+public class OrderProduct {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

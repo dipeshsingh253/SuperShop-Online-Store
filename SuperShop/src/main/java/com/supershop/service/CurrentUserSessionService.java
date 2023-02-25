@@ -1,13 +1,13 @@
 package com.supershop.service;
 
-import com.supershop.dto.MyResponse;
+import com.supershop.dto.MyResponseDto;
 import com.supershop.dto.UserDto;
 import com.supershop.exception.CurrentUserServiceException;
 import com.supershop.exception.UserException;
 
 public interface CurrentUserSessionService {
 
-	public MyResponse loginUser(UserDto userDto) throws UserException, CurrentUserServiceException;
+	public MyResponseDto loginUser(UserDto userDto) throws UserException, CurrentUserServiceException;
 
 	public void logoutUser(String authenticationToken) throws UserException, CurrentUserServiceException;
 

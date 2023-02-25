@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class MyResponse {
+public class MyResponseDto {
 
 	private String message;
 	private Boolean authorized;

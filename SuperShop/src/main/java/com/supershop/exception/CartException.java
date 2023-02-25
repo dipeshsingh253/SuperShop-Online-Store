@@ -1,15 +1,17 @@
 package com.supershop.exception;
 
+/**
+ * Exception related to cart functioning.
+ */
+
 public class CartException extends Exception {
 
 	public CartException() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
 	public CartException(String message) {
 		super(message);
-		// TODO Auto-generated constructor stub
 	}
 
 }

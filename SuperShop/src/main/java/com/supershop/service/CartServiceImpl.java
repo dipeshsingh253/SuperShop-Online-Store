@@ -77,16 +77,16 @@ public class CartServiceImpl implements CartService {
 			throw new CartException("Product already exists in the cart");
 		}
 
-		if (product.getStock() < cartDto.getQantity()) {
+		if (product.getStock() < cartDto.getQuantity()) {
 			throw new ProductException("product out of stock");
 		}
 
-		product.setStock(product.getStock() - cartDto.getQantity());
+		product.setStock(product.getStock() - cartDto.getQuantity());
 
 		Cart newCart = new Cart();
 
 		newCart.setCreateDateTime(LocalDateTime.now());
-		newCart.setQuantity(cartDto.getQantity());
+		newCart.setQuantity(cartDto.getQuantity());
 		newCart.setProduct(product);
 		newCart.setUser(user);
 
@@ -171,7 +171,7 @@ public class CartServiceImpl implements CartService {
 			CartItemDto cartItemDto = new CartItemDto();
 			cartItemDto.setId(c.getId());
 			cartItemDto.setUserId(c.getUser().getId());
-			cartItemDto.setQantity(c.getQuantity());
+			cartItemDto.setQuantity(c.getQuantity());
 			cartItemDto.setProductDto(pDto);
 			cartItemDto.setTotal(c.getProduct().getPrice() * c.getQuantity());
 
@@ -236,7 +236,7 @@ public class CartServiceImpl implements CartService {
 		Cart newCart = new Cart();
 		newCart.setId(existedCart.getId());
 		newCart.setCreateDateTime(LocalDateTime.now());
-		newCart.setQuantity(cartDto.getQantity());
+		newCart.setQuantity(cartDto.getQuantity());
 		newCart.setProduct(product);
 		newCart.setUser(user);
 

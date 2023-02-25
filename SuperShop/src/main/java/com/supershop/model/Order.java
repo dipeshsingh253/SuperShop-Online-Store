@@ -2,8 +2,6 @@ package com.supershop.model;
 
 import java.time.LocalDateTime;
 import java.util.List;
-
-import javax.persistence.CascadeType;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -15,20 +13,22 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+/**
+ * Entity Model for order table.
+ */
+
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "orders")
+@Table(name = "order")
 public class Order {
 
     @Id
@@ -54,7 +54,7 @@ public class Order {
 
     // one order can have multiple order items
     @OneToMany(mappedBy = "order", fetch = FetchType.EAGER)
-    private List<OrderItem> orderItems;
+    private List<OrderProduct> orderProducts;
 
     @NotBlank
     private String orderStatus;

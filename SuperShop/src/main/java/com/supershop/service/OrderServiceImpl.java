@@ -1,8 +1,6 @@
 package com.supershop.service;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 
@@ -11,7 +9,6 @@ import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.supershop.dto.CartDto;
 import com.supershop.dto.OrderDto;
 import com.supershop.exception.CartException;
 import com.supershop.exception.CurrentUserServiceException;
@@ -21,9 +18,8 @@ import com.supershop.helper.Helper;
 import com.supershop.model.Cart;
 import com.supershop.model.CurrentUserSession;
 import com.supershop.model.Order;
-import com.supershop.model.OrderItem;
+import com.supershop.model.OrderProduct;
 import com.supershop.model.Payment;
-import com.supershop.model.Product;
 import com.supershop.model.User;
 import com.supershop.repository.*;
 
@@ -100,17 +96,17 @@ public class OrderServiceImpl implements OrderService {
 
         for (Cart c : cart) {
 
-            OrderItem orderItem = new OrderItem();
+            OrderProduct orderProduct = new OrderProduct();
 
-            orderItem.setCreateDateTime(LocalDateTime.now());
-            orderItem.setOrder(newOrder);
-            orderItem.setProduct(c.getProduct());
-            orderItem.setQuantity(c.getQuantity());
-            orderItem.setTotalPrice(c.getProduct().getPrice() * c.getQuantity());
+            orderProduct.setCreateDateTime(LocalDateTime.now());
+            orderProduct.setOrder(newOrder);
+            orderProduct.setProduct(c.getProduct());
+            orderProduct.setQuantity(c.getQuantity());
+            orderProduct.setTotalPrice(c.getProduct().getPrice() * c.getQuantity());
 
             totalAmount += c.getQuantity() * c.getProduct().getPrice();
 
-            orderItemRepository.save(orderItem);
+            orderItemRepository.save(orderProduct);
         }
         payment.setAmount(totalAmount);
         orderRepository.save(newOrder);

@@ -5,7 +5,7 @@ import java.time.LocalDateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.supershop.dto.MyResponse;
+import com.supershop.dto.MyResponseDto;
 import com.supershop.dto.UserDto;
 import com.supershop.exception.CurrentUserServiceException;
 import com.supershop.exception.UserException;
@@ -26,7 +26,7 @@ public class CurrentUserSessionServiceImpl implements CurrentUserSessionService 
 	private UserRepository userRepository;
 
 	@Override
-	public MyResponse loginUser(UserDto userDto) throws UserException, CurrentUserServiceException {
+	public MyResponseDto loginUser(UserDto userDto) throws UserException, CurrentUserServiceException {
 
 		User user = userRepository.findByEmail(userDto.getEmail());
 
@@ -52,7 +52,7 @@ public class CurrentUserSessionServiceImpl implements CurrentUserSessionService 
 
 		currentUserSessionRepository.save(newUserSession);
 
-		MyResponse  response = new MyResponse();
+		MyResponseDto response = new MyResponseDto();
 		response.setMessage("Log in Successfull");
 		response.setAuthenticationToken(token);
 		response.setAuthorized(user.getRole().equals("admin")?  true : false);	
